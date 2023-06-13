@@ -15,10 +15,11 @@ return new class extends Migration
     {
         Schema::create('abouts', function (Blueprint $table) {
             $table->id();
-            $table->string('description');
+            $table->text('description');
             $table->string('image');
             $table->string('img_title');
             $table->longText('img_body');
+            $table->string('icon');
             $table->string('client_count');
             $table->string('client_desc');
             $table->timestamps();

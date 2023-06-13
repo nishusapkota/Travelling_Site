@@ -70,8 +70,32 @@ class MessageController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
-    }
+        $message=Message::find($id);
+
+        if(!$message){
+            return response()->json([
+                'message'=>"Record not available.."
+            ]);
+        }
+
+        $this->validate($request,[
+            'name' => 'required',
+            'phone' => 'required',
+            'email' => 'required|email',
+            'message' => 'required'
+           ]); 
+           
+        $message->name=$request->name;
+        $message->phone=$request->phone;
+        $message->email=$request->email;
+        $message->message=$request->message;
+
+       
+        $message->save();
+        return response()->json([
+            'message'=>'message updated successfully'
+        ]);
+       }
 
     /**
      * Remove the specified resource from storage.
