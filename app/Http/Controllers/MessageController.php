@@ -70,6 +70,12 @@ class MessageController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->validate($request,[
+            'name' => 'required',
+            'phone' => 'required',
+            'email' => 'required|email',
+            'message' => 'required'
+           ]); 
         $message=Message::find($id);
 
         if(!$message){
@@ -78,12 +84,7 @@ class MessageController extends Controller
             ]);
         }
 
-        $this->validate($request,[
-            'name' => 'required',
-            'phone' => 'required',
-            'email' => 'required|email',
-            'message' => 'required'
-           ]); 
+      
            
         $message->name=$request->name;
         $message->phone=$request->phone;
