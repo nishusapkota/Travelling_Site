@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\BlogController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\SocialMediaController;
 
 
 /*
@@ -23,3 +24,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::apiResource('messages','\App\Http\Controllers\MessageController');
 Route::apiResource('blog','\App\Http\Controllers\BlogController');
 Route::apiResource('about','\App\Http\Controllers\AboutController');
+Route::patch('socialmedia/{id}',[SocialMediaController::class,'update']);
