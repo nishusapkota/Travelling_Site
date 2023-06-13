@@ -19,5 +19,8 @@ class PackageCategory extends Model
         return $this->belongsTo('\App\Models\Destination');
     }
 
+    function package(){
+        return $this->hasMany('\App\Models\Package');
+    }
 }
 

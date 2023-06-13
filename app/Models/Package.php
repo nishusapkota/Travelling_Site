@@ -16,4 +16,7 @@ class Package extends Model
         'overview',
         'duration'
     ];
+    function packageCategory(){
+        return $this->belongsTo('\App\Models\PackageCategory');
+    }
 }

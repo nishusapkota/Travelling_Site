@@ -28,3 +28,4 @@ Route::patch('socialmedia/{id}',[SocialMediaController::class,'update']);
 Route::apiResource('contact','\App\Http\Controllers\ContactController');
 Route::apiResource('destination','\App\Http\Controllers\DestinationController');
 Route::apiResource('package_category','\App\Http\Controllers\PackageCategoryController');
+Route::apiResource('package','\App\Http\Controllers\PackageController');
