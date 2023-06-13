@@ -11,11 +11,9 @@ class Package extends Model
     protected $fillable=[
         'title',
         'image',
-        'things_to_do_id',
+        'package_category_id',
         'price',
         'overview',
-        'duration',
-        'free_cancellation',
-        'call_us_on'
+        'duration'
     ];
 }

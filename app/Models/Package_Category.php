@@ -5,11 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Itinerary_points extends Model
+class Package_Category extends Model
 {
     use HasFactory;
     protected $fillable=[
-        'itinerary_id',
-        'points'
+        'title',
+        'image',
+        'description',
+        'destination_id'
     ];
 }

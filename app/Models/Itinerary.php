@@ -11,6 +11,7 @@ class Itinerary extends Model
     protected $fillable=[
         'title',
         'description',
-        'packages_id'
+        'package_id',
+        'body'
     ];
 }

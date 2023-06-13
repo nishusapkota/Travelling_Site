@@ -9,7 +9,7 @@ class Packages_Included extends Model
 {
     use HasFactory;
     protected $fillable=[
-        'packages_id',
-        'points'
+        'package_id',
+        'description'
     ];
 }

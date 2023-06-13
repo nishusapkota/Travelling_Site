@@ -13,12 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('things_to_dos', function (Blueprint $table) {
+        Schema::create('package__categories', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->string('image');
             $table->longText('description');
-            $table->foreignId('destination_id');
+            $table->unsignedBigInteger('destination_id');
+            $table->foreign('destination_id')->references('id')->on('destinations');
             $table->timestamps();
         });
     }
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('things_to_dos');
+        Schema::dropIfExists('package__categories');
     }
 };

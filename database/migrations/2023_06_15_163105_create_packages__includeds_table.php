@@ -15,8 +15,9 @@ return new class extends Migration
     {
         Schema::create('packages__includeds', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('packages_id');
-            $table->Text('points');
+            $table->unsignedBigInteger('package_id');
+            $table->foreign('package_id')->references('id')->on('packages');
+            $table->longText('description');
             $table->timestamps();
         });
     }
