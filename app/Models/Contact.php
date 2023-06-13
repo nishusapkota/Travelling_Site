@@ -12,7 +12,9 @@ class Contact extends Model
         'description',
         'address',
         'phone',
-        'email',
-        'social_media_id'
+        'email'
+       
     ];
+
+    
 }

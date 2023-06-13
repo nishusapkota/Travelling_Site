@@ -25,3 +25,4 @@ Route::apiResource('messages','\App\Http\Controllers\MessageController');
 Route::apiResource('blog','\App\Http\Controllers\BlogController');
 Route::apiResource('about','\App\Http\Controllers\AboutController');
 Route::patch('socialmedia/{id}',[SocialMediaController::class,'update']);
+Route::apiResource('contact','\App\Http\Controllers\ContactController');

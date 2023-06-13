@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
             $table->longText('description');
             $table->string('address');
-            $table->string('phone');
+            $table->json('phone');
             $table->string('email');
-            $table->foreignId('social_media_id');
+           
             $table->timestamps();
         });
     }
