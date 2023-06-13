@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('package__categories', function (Blueprint $table) {
+        Schema::create('package_categories', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->string('image');

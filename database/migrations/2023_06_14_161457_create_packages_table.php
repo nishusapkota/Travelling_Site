@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('image');
             $table->unsignedBigInteger('package_category_id');
-            $table->foreign('package_category_id')->references('id')->on('package__categories');
+            $table->foreign('package_category_id')->references('id')->on('package_categories');
             $table->string('price');
             $table->longText('overview');
             $table->string('duration');

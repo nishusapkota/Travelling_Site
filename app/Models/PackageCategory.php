@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Package_Category extends Model
+class PackageCategory extends Model
 {
     use HasFactory;
     protected $fillable=[
@@ -14,4 +14,10 @@ class Package_Category extends Model
         'description',
         'destination_id'
     ];
+    function destination() 
+    {
+        return $this->belongsTo('\App\Models\Destination');
+    }
+
 }
+
