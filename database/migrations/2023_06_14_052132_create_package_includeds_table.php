@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('packages__includeds', function (Blueprint $table) {
+        Schema::create('package_includeds', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('package_id');
             $table->foreign('package_id')->references('id')->on('packages');
-            $table->longText('description');
+            $table->longText('description'); 
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('packages__includeds');
+        Schema::dropIfExists('package_includeds');
     }
 };

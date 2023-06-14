@@ -19,4 +19,7 @@ class Package extends Model
     function packageCategory(){
         return $this->belongsTo('\App\Models\PackageCategory');
     }
+    function packageincludes(){
+        return $this->hasMany('\App\Models\PackageIncluded');
+    }
 }
