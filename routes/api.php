@@ -31,3 +31,4 @@ Route::apiResource('package_category','\App\Http\Controllers\PackageCategoryCont
 Route::apiResource('package','\App\Http\Controllers\PackageController');
 Route::apiResource('package_included','\App\Http\Controllers\PackageIncludedController');
 Route::apiResource('itinerary','\App\Http\Controllers\ItineraryController');
+Route::apiResource('testimonial','\App\Http\Controllers\TestimonialController');
