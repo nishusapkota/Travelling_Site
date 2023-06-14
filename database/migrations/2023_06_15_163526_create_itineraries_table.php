@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('itineraries', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->Text('description');
+            $table->text('description')->nullable();
             $table->unsignedBigInteger('package_id');
             $table->foreign('package_id')->references('id')->on('packages');
             $table->longText('body')->nullable();

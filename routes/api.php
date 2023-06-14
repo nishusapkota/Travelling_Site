@@ -30,3 +30,4 @@ Route::apiResource('destination','\App\Http\Controllers\DestinationController');
 Route::apiResource('package_category','\App\Http\Controllers\PackageCategoryController');
 Route::apiResource('package','\App\Http\Controllers\PackageController');
 Route::apiResource('package_included','\App\Http\Controllers\PackageIncludedController');
+Route::apiResource('itinerary','\App\Http\Controllers\ItineraryController');
