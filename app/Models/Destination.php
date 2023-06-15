@@ -22,4 +22,7 @@ class Destination extends Model
         'package_categories_id');
     }
     
+    function packages(){
+        return $this->hasMany('\App\Models\Package');
+    }
 }

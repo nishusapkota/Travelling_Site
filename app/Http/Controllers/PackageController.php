@@ -31,7 +31,9 @@ class PackageController extends Controller
             'price'=>'required',
             'overview'=>'required',
             'duration'=>'required',
-            'package_category_id'=>'required'
+            'destinations_id'=>'required',
+            'package_categories_id'=>'required|array',
+            'package_categories_id.*'=>'required|exists:package_categories,id'
         ]);
 
         $image_name=time().".".$request->file('image')->getClientOriginalExtension();
@@ -43,9 +45,9 @@ class PackageController extends Controller
         'price'=>$request->price,
         'overview'=>$request->overview,
         'duration'=>$request->duration,
-        'package_category_id'=>$request->package_category_id
+        'destinations_id'=>$request->destinations_id
         ]);
-       
+       $result->packageCategories()->attach($request->package_categories_id);
         if($result){
             return response()->json([
                 'message'=>'Package created successfully..'
@@ -65,7 +67,7 @@ class PackageController extends Controller
      */
     public function show($id)
     {
-        $package=Package::find($id);
+        $package=Package::with('packageCategories')->find($id);
        
         if($package){
             return $package;
@@ -91,7 +93,9 @@ class PackageController extends Controller
             'price'=>'required',
             'overview'=>'required',
             'duration'=>'required',
-            'package_category_id'=>'required'
+            'destinations_id'=>'required',
+            'package_categories_id'=>'required|array',
+            'package_categories_id.*'=>'required|exists:package_categories,id'
         ]);
 
         $package=Package::find($id);
@@ -99,14 +103,14 @@ class PackageController extends Controller
         if($package){
             $image_name=time().".".$request->file('image')->getClientOriginalExtension();
             $request->file('image')->move(public_path('package_image'),$image_name);
-            
+            $package->packageCategories()->sync($request->package_categories_id);
            $result=$package->update([
             'title'=>$request->title,
             'image'=>$image_name,
             'price'=>$request->price,
             'overview'=>$request->overview,
             'duration'=>$request->duration,
-            'package_category_id'=>$request->package_category_id
+            'destinations_id'=>$request->destinations_id
             ]);
            
             if($result){
@@ -134,7 +138,9 @@ class PackageController extends Controller
      */
     public function destroy($id)
     {
-        $result=Package::destroy($id);
+        $package=Package::find($id);
+        $package->packageCategories()->detach();
+        $result=$package->delete();
         if($result){
             return response()->json([
                 'message'=>'Deleted Successfully'

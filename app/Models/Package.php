@@ -14,12 +14,17 @@ class Package extends Model
         'package_category_id',
         'price',
         'overview',
-        'duration'
+        'duration',
+        'destinations_id'
     ];
-    function packageCategory(){
-        return $this->belongsTo('\App\Models\PackageCategory');
+    function packageCategories(){
+        return $this->belongsToMany('\App\Models\PackageCategory','package_package_categories','packages_id',
+        'package_categories_id');
     }
     function packageincludes(){
         return $this->hasMany('\App\Models\PackageIncluded');
+    }
+    function destination(){
+        return $this->belongTo('\App\Models\Destination');
     }
 }

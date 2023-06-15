@@ -19,10 +19,12 @@ class PackageCategory extends Model
         return $this->belongsToMany(Destination::class,
         'destination_package_categories',
         'package_categories_id','destinations_id');
+
     }
 
-    function package(){
-        return $this->hasMany('\App\Models\Package');
+    function packages(){
+        return $this->belongsToMany('\App\Models\Package','package_package_categories','packages_id'
+        ,'package_categories_id');
     }
 }
 
