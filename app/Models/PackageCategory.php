@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Destination;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class PackageCategory extends Model
 {
@@ -11,12 +12,13 @@ class PackageCategory extends Model
     protected $fillable=[
         'title',
         'image',
-        'description',
-        'destination_id'
+        'description'
     ];
-    function destination() 
+    function destinations()
     {
-        return $this->belongsTo('\App\Models\Destination');
+        return $this->belongsToMany(Destination::class,
+        'destination_package_categories',
+        'package_categories_id','destinations_id');
     }
 
     function package(){

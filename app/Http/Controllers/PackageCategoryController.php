@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Destination;
 use App\Models\Package;
 use App\Models\PackageCategory;
+use App\Models\DestinationPackageCategory;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PackageCategoryController extends Controller
 {
@@ -15,7 +19,7 @@ class PackageCategoryController extends Controller
      */
     public function index()
     {
-        return PackageCategory::all();
+        return PackageCategory::with('destinations')->get();
     }
 
     /**
@@ -30,9 +34,12 @@ class PackageCategoryController extends Controller
             'title'=>'required',
             'image'=>'required|image|mimes:png,jpg,jpeg',
             'description'=>'required',
-            'destination_id'=>'required'
+            'destinations_id'=>'required|array',      
+            'destinations_id.*'=>'required|exists:destinations,id',      
+            
         ]);
-
+        // dd($request->all());
+        // DB::beginTransaction();
         $image_name=time().".".$request->file('image')->getClientOriginalExtension();
         $request->file('image')->move(public_path('category_image'),$image_name);
         
@@ -40,9 +47,12 @@ class PackageCategoryController extends Controller
         'title'=>$request->title,
             'image'=>$image_name,
             'description'=>$request->description,
-            'destination_id'=>$request->destination_id
+           
         ]);
-       
+        // dd($result);
+        // $destinationid = collect(Destination::all())->pluck('id')->toArray();
+        $result->destinations()->attach($request->destinations_id);
+        // dd($result->destinations());
         if($result){
             return response()->json([
                 'message'=>'Category created successfully..'
@@ -62,8 +72,8 @@ class PackageCategoryController extends Controller
      */
     public function show($id)
     {
-        $packageCategory=PackageCategory::find($id);
-       
+        $packageCategory=PackageCategory::with('destinations')->find($id);
+        
         if($packageCategory){
             return $packageCategory;
         }
@@ -85,7 +95,9 @@ class PackageCategoryController extends Controller
             'title'=>'required',
             'image'=>'required|image|mimes:png,jpg,jpeg',
             'description'=>'required',
-            'destination_id'=>'required'
+            'destinations_id'=>'required|array',
+            'destinations_id.*'=>'required|exists:destinations,id',      
+
         ]);
         $packageCategory=PackageCategory::find($id);
 
@@ -96,11 +108,12 @@ class PackageCategoryController extends Controller
         }
         $image_name=time().".".$request->file('image')->getClientOriginalExtension();
         $request->file('image')->move(public_path('category_image'),$image_name);
+        $packageCategory->destinations()->sync($request->destinations_id);
+
         $result=$packageCategory->update([
             'title'=>$request->title,
             'image'=>$image_name,
             'description'=>$request->description,
-            'destination_id'=>$request->destination_id
         ]);
         if($result){
             return response()->json([
@@ -121,7 +134,10 @@ class PackageCategoryController extends Controller
      */
     public function destroy($id)
     {
-        $result=PackageCategory::destroy($id);
+        $record=PackageCategory::find($id);
+        $record->destinations()->detach();
+        $result=$record->delete();
+
         if($result){
             return response()->json([
                 'message'=>'Deleted Successfully'

@@ -14,7 +14,7 @@ class DestinationController extends Controller
      */
     public function index()
     {
-        return Destination::all();
+        return Destination::with('packageCategories')->get();
     }
 
     /**
@@ -33,13 +33,15 @@ class DestinationController extends Controller
 
         $image_name=time().".".$request->file('image')->getClientOriginalExtension();
         $request->file('image')->move(public_path('destination_image'),$image_name);
-        
+
        $result= $destination->create([
         'title'=>$request->title,
             'image'=>$image_name,
             'description'=>$request->description
         ]);
-       
+       // $packageCategoryid=[1,2];
+        //$destination->packageCategories()->attach($packageCategoryid,['destinations_id' => $result->id]);
+
         if($result){
             return response()->json([
                 'message'=>'Destination created successfully..'
@@ -83,6 +85,7 @@ class DestinationController extends Controller
             'image'=>'required|image|mimes:png,jpg,jpeg',
             'description'=>'required'
         ]);
+        $packageCategories  = [4,5];
         $destination=Destination::find($id);
 
         if(!$destination){
@@ -90,6 +93,7 @@ class DestinationController extends Controller
                 'message'=>"Record not available.."
             ]);
         }
+        $destination->packageCategories()->sync($packageCategories);
         $image_name=time().".".$request->file('image')->getClientOriginalExtension();
         $request->file('image')->move(public_path('destination_image'),$image_name);
         $result=$destination->update([
@@ -117,7 +121,10 @@ class DestinationController extends Controller
      */
     public function destroy($id)
     {
+        $result = Destination::find($id);
+        $result->packageCategories()->detach();
         $result=Destination::destroy($id);
+
         if($result){
             return response()->json([
                 'message'=>'Deleted Successfully'

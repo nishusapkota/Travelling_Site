@@ -17,6 +17,9 @@ class Destination extends Model
 
     function packageCategories()
     {
-        return $this->hasMany(PackageCategory::class,'destination_id');
+        return $this->belongsToMany(PackageCategory::class,
+        'destination_package_categories','destinations_id',
+        'package_categories_id');
     }
+    
 }
