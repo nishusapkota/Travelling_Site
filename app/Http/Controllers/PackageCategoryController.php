@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PackageCategoryResource;
 use App\Models\Destination;
 use App\Models\Package;
 use App\Models\PackageCategory;
@@ -19,7 +20,11 @@ class PackageCategoryController extends Controller
      */
     public function index()
     {
-        return PackageCategory::with('destinations')->get();
+        $packageCategory=PackageCategory::with('destinations')->get();
+        return response()->json([
+            'status'=>200,
+            'data'=>PackageCategoryResource::collection($packageCategory)
+        ]);
     }
 
     /**
@@ -45,7 +50,7 @@ class PackageCategoryController extends Controller
         
        $result= $packageCategory->create([
         'title'=>$request->title,
-            'image'=>$image_name,
+            'image'=>'category_image/'.$image_name,
             'description'=>$request->description,
            
         ]);
@@ -55,10 +60,12 @@ class PackageCategoryController extends Controller
         // dd($result->destinations());
         if($result){
             return response()->json([
+                'status'=>200,
                 'message'=>'Category created successfully..'
             ]);
         }
         return response()->json([
+            'status'=>201,
             'message'=>'Failed to create category..'
         ]);
 
@@ -75,9 +82,17 @@ class PackageCategoryController extends Controller
         $packageCategory=PackageCategory::with('destinations')->find($id);
         
         if($packageCategory){
-            return $packageCategory;
+            return response()->json([
+                'status'=>200,
+                'data' => PackageCategoryResource::collection([$packageCategory])
+                ->map(function ($resource) {
+                    return $resource->toArray(request());
+                })
+                
+            ]);
         }
         return response()->json([
+            'status'=>201,
             'message'=>'Result Not Found...'
         ]);
     }
@@ -103,6 +118,7 @@ class PackageCategoryController extends Controller
 
         if(!$packageCategory){
             return response()->json([
+                'status'=>201,
                 'message'=>"Record not available.."
             ]);
         }
@@ -112,15 +128,17 @@ class PackageCategoryController extends Controller
 
         $result=$packageCategory->update([
             'title'=>$request->title,
-            'image'=>$image_name,
+            'image'=>'category_image/'.$image_name,
             'description'=>$request->description,
         ]);
         if($result){
             return response()->json([
+                'status'=>200,
                 'message'=>'updated successfully....'
             ]);
         }
         return response()->json([
+            'status'=>201,
             'message'=>'Fail to update ....'
         ]);
 
@@ -140,9 +158,11 @@ class PackageCategoryController extends Controller
 
         if($result){
             return response()->json([
+                'status'=>200,
                 'message'=>'Deleted Successfully'
             ]);
         return response()->json([
+            'status'=>201,
             'message'=>'Failed to delete'
         ]);
         }

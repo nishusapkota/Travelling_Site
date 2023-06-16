@@ -16,9 +16,9 @@ return new class extends Migration
         Schema::create('package_package_categories', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('packages_id');
-            $table->foreign('packages_id')->references('id')->on('packages');
+            $table->foreign('packages_id')->references('id')->on('packages')->onDelete('cascade');
             $table->unsignedBigInteger('package_categories_id');
-            $table->foreign('package_categories_id')->references('id')->on('package_categories');
+            $table->foreign('package_categories_id')->references('id')->on('package_categories')->onDelete('cascade');
             $table->timestamps();
         });
     }

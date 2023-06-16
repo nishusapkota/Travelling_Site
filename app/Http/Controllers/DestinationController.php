@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Resources\DestinationResource;
 use App\Models\Destination;
+use App\Models\PackageCategory;
 use Illuminate\Http\Request;
 
 class DestinationController extends Controller
@@ -14,7 +15,11 @@ class DestinationController extends Controller
      */
     public function index()
     {
-        return Destination::with('packageCategories')->get();
+        $destinations=Destination::with('packageCategories')->get();
+        return response()->json([
+            'status'=>200,
+            'data'=>DestinationResource::collection($destinations)
+        ]); 
     }
 
     /**
@@ -28,7 +33,10 @@ class DestinationController extends Controller
         $request->validate([
             'title'=>'required',
             'image'=>'required|image|mimes:png,jpg,jpeg',
-            'description'=>'required'
+            'description'=>'required',
+            'package_categories_id'=>'nullable|array',      
+            'package_categories_id.*'=>'exists:package_categories,id',
+            
         ]);
 
         $image_name=time().".".$request->file('image')->getClientOriginalExtension();
@@ -36,18 +44,22 @@ class DestinationController extends Controller
 
        $result= $destination->create([
         'title'=>$request->title,
-            'image'=>$image_name,
+            'image'=>'destination_image/'.$image_name,
             'description'=>$request->description
         ]);
+        $result->packageCategories()->attach($request->package_categories_id);
+
        // $packageCategoryid=[1,2];
-        //$destination->packageCategories()->attach($packageCategoryid,['destinations_id' => $result->id]);
+       // $destination->packageCategories()->attach($request->package_categories_id);
 
         if($result){
             return response()->json([
+                'status'=>200,
                 'message'=>'Destination created successfully..'
             ]);
         }
         return response()->json([
+            'status'=>201,
             'message'=>'Failed to create destination..'
         ]);
 
@@ -60,16 +72,17 @@ class DestinationController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
-        $destination=Destination::find($id);
-       
-        if($destination){
-            return $destination;
-        }
-        return response()->json([
-            'message'=>'Result Not Found...'
-        ]);
-    }
+{
+    $destination = Destination::find($id);
+    return response()->json([
+        'status' => 200,
+        'data' => DestinationResource::collection([$destination])
+        ->map(function ($resource) {
+            return $resource->toArray(request());
+        }),
+    ]);
+}
+
 
     /**
      * Update the specified resource in storage.
@@ -83,30 +96,36 @@ class DestinationController extends Controller
         $request->validate([
             'title'=>'required',
             'image'=>'required|image|mimes:png,jpg,jpeg',
-            'description'=>'required'
+            'description'=>'required',
+            'package_categories_id'=>'required|array',      
+            'package_categories_id.*'=>'required|exists:package_categories,id',
         ]);
-        $packageCategories  = [4,5];
+       
         $destination=Destination::find($id);
 
         if(!$destination){
             return response()->json([
+                'status'=>'201',
                 'message'=>"Record not available.."
             ]);
         }
-        $destination->packageCategories()->sync($packageCategories);
+       $destination->packageCategories()->sync($request->package_categories_id);
         $image_name=time().".".$request->file('image')->getClientOriginalExtension();
         $request->file('image')->move(public_path('destination_image'),$image_name);
+       
         $result=$destination->update([
             'title'=>$request->title,
-            'image'=>$image_name,
+            'image'=>'destination_image/'.$image_name,
             'description'=>$request->description 
         ]);
         if($result){
             return response()->json([
+                'status'=>'200',
                 'message'=>'updated successfully....'
             ]);
         }
         return response()->json([
+            'status'=>'201',
             'message'=>'Fail to update ....'
         ]);
 
@@ -122,14 +141,16 @@ class DestinationController extends Controller
     public function destroy($id)
     {
         $result = Destination::find($id);
-        $result->packageCategories()->detach();
+       $result->packageCategories()->detach();
         $result=Destination::destroy($id);
 
         if($result){
             return response()->json([
+                'status'=>'200',
                 'message'=>'Deleted Successfully'
             ]);
         return response()->json([
+            'status'=>'201',
             'message'=>'Failed to delete'
         ]);
         }
