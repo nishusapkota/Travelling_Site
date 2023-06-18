@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PackageResource;
 use App\Models\Package;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,11 @@ class PackageController extends Controller
      */
     public function index()
     {
-        return Package::all();
+        $package=Package::all();
+        return response()->json([
+            'status'=>200,
+            'data'=>PackageResource::collection($package)
+        ]);
     }
 
     /**
@@ -41,7 +46,7 @@ class PackageController extends Controller
         
        $result=$package->create([
         'title'=>$request->title,
-        'image'=>$image_name,
+        'image'=>'package_image/'.$image_name,
         'price'=>$request->price,
         'overview'=>$request->overview,
         'duration'=>$request->duration,
@@ -50,10 +55,12 @@ class PackageController extends Controller
        $result->packageCategories()->attach($request->package_categories_id);
         if($result){
             return response()->json([
+                'status'=>200,
                 'message'=>'Package created successfully..'
             ]);
         }
         return response()->json([
+            'status'=>201,
             'message'=>'Failed to create destination..'
         ]);
 
@@ -106,7 +113,7 @@ class PackageController extends Controller
             $package->packageCategories()->sync($request->package_categories_id);
            $result=$package->update([
             'title'=>$request->title,
-            'image'=>$image_name,
+            'image'=>'package_image'.$image_name,
             'price'=>$request->price,
             'overview'=>$request->overview,
             'duration'=>$request->duration,
@@ -115,15 +122,18 @@ class PackageController extends Controller
            
             if($result){
                 return response()->json([
+                    'status'=>200,
                     'message'=>'Package updated successfully..'
                 ]);
             }
             return response()->json([
+                'status'=>201,
                 'message'=>'Failed to update..'
             ]);
            
         }
         return response()->json([
+            'status'=>201,
             'message'=>'Result Not Found...'
         ]);
         
@@ -143,9 +153,11 @@ class PackageController extends Controller
         $result=$package->delete();
         if($result){
             return response()->json([
+                'status'=>200,
                 'message'=>'Deleted Successfully'
             ]);
         return response()->json([
+            'status'=>201,
             'message'=>'Failed to delete'
         ]);
         }

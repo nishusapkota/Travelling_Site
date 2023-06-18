@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\MessageResource;
 use App\Models\Message;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,11 @@ class MessageController extends Controller
      */
     public function index()
     {
-        return ( Message::all() );
+        $message=Message::all();
+        return response()->json([
+            'status'=>200,
+            'data'=>MessageResource::collection($message)
+        ]);
     }
 
     /**
@@ -80,6 +85,7 @@ class MessageController extends Controller
 
         if(!$message){
             return response()->json([
+                'status'=>201,
                 'message'=>"Record not available.."
             ]);
         }
@@ -94,6 +100,7 @@ class MessageController extends Controller
        
         $message->save();
         return response()->json([
+            'status'=>200,
             'message'=>'message updated successfully'
         ]);
        }
@@ -109,9 +116,11 @@ class MessageController extends Controller
         $result=Message::destroy($id);
         if($result){
             return response()->json([
+                'status'=>200,
                 'message'=>'Message Deleted Successfully'
             ]);
         return response()->json([
+            'status'=>201,
             'message'=>'Failed to delete message'
         ]);
         }

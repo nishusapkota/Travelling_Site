@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ContactResource;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,11 @@ class ContactController extends Controller
      */
     public function index()
     {
-        return Contact::all();
+        $contact=Contact::all();
+        return response()->json([
+            'status'=>200,
+            'data'=>ContactResource::collection($contact)
+        ]);
     }
 
     /**
@@ -40,10 +45,12 @@ class ContactController extends Controller
         ]);
         if($result){
             return response()->json([
+                'status'=>200,
                 'message'=>'Created successfully....'
             ]);
         }
         return response()->json([
+            'status'=>201,
             'message'=>'Fail to create....'
         ]);
 
@@ -85,6 +92,7 @@ class ContactController extends Controller
     $contact=Contact::find($id);
     if(!$contact){
         return response()->json([
+            'status'=>201,
             'message'=>'Contact not available..'
         ]);
     }
@@ -96,10 +104,12 @@ class ContactController extends Controller
     ]);
     if($result){
         return response()->json([
+            'status'=>200,
             'message'=>'updated successfully....'
         ]);
     }
     return response()->json([
+        'status'=>201,
         'message'=>'Fail to update ....'
     ]);
 
@@ -119,9 +129,11 @@ class ContactController extends Controller
         $result=Contact::destroy($id);
       if($result){
         return response()->json([
+            'status'=>200,
             'message'=>'Contact Deleted Successfully'
         ]);
     return response()->json([
+        'status'=>201,
         'message'=>'Failed to delete contact'
     ]);
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ItineraryResource;
 use App\Models\Itinerary;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,8 @@ class ItineraryController extends Controller
      */
     public function index()
     {
-        return Itinerary::all();
+        $itinerary=Itinerary::all();
+        return ItineraryResource::collection($itinerary);
     }
 
     /**
@@ -34,7 +36,9 @@ class ItineraryController extends Controller
     
         $itinerary = Itinerary::create($validatedData);
     
-        return response()->json(['message' => 'Itinerary created successfully', 'data' => $itinerary], 201);
+        return response()->json([
+            'message' => 'Itinerary created successfully'
+            ], 200);
     }
 
     /**
@@ -47,7 +51,8 @@ class ItineraryController extends Controller
     {
         $itinerary = Itinerary::findOrFail($id);
 
-        return response()->json(['data' => $itinerary]);
+        return response()->json([
+            'data' => $itinerary]);
     }
 
     /**
@@ -69,7 +74,10 @@ class ItineraryController extends Controller
         $itinerary = Itinerary::findOrFail($id);
         $itinerary->update($validatedData);
     
-        return response()->json(['message' => 'Itinerary updated successfully', 'data' => $itinerary]);
+        return response()->json([
+            'status'=>200,
+            'message' => 'Itinerary updated successfully'
+            ]);
     
     }
 
@@ -83,8 +91,9 @@ class ItineraryController extends Controller
     {
         $itinerary = Itinerary::findOrFail($id);
     $itinerary->delete();
-
-    return response()->json(['message' => 'Itinerary deleted successfully']);
+    return response()->json([
+        'status'=>200,
+        'message' => 'Itinerary deleted successfully']);
 
     }
 }

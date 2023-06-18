@@ -40,3 +40,8 @@ Route::get('things-to-do-by-destination/{destination_id}',[\App\Http\Controllers
 'package_category']);
 Route::get('destination-by-things-to-do/{id}',[\App\Http\Controllers\FrontendController::class,
 'destinationByCatagory']);
+
+
+//cover images
+
+//protrait

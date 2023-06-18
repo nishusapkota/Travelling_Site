@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PackageIncludedResource;
 use App\Models\PackageIncluded;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,8 @@ class PackageIncludedController extends Controller
      */
     public function index()
     {
-        return PackageIncluded::all();
+        $packageinclude=PackageIncluded::all();
+        return PackageIncludedResource::collection($packageinclude);
     }
 
     /**
@@ -36,10 +38,12 @@ class PackageIncludedController extends Controller
         ]);
         if($result){
             return response()->json([
+                'status'=>200,
                 'message'=>'Record created successfully..'
             ]);
         }
         return response()->json([
+            'status'=>201,
             'message'=>'Failed to create..'
         ]);
 
@@ -86,14 +90,17 @@ class PackageIncludedController extends Controller
             ]);
             if($result){
                 return response()->json([
+                    'status'=>200,
                     'message'=>'Record updated successfully..'
                 ]);
             }
              return response()->json([
+                'status'=>201,
                'message'=>'Failed to update..'
             ]);
         }
         return response()->json([
+            'status'=>201,
             'message'=>'Record not available'
         ]);
     }
@@ -109,9 +116,11 @@ class PackageIncludedController extends Controller
         $result=PackageIncluded::destroy($id);
         if($result){
             return response()->json([
+                'status'=>200,
                 'message'=>'Deleted Successfully'
             ]);
         return response()->json([
+            'status'=>201,
             'message'=>'Failed to delete'
         ]);
         }

@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Http\Resources\AboutResource;
 use App\Models\About;
 use Illuminate\Http\Request;
 
@@ -13,7 +15,11 @@ class AboutController extends Controller
      */
     public function index()
     {
-        return About::all();
+        $about=About::all();
+        return response()->json([
+            'status'=>200,
+            'data'=>AboutResource::collection($about)
+        ]);
     }
 
     /**
@@ -41,20 +47,22 @@ class AboutController extends Controller
        
        $result= $about->create([
             'description'=>$request->description,
-            'image'=>$image_name,
+            'image'=>'about_image/'.$image_name,
             'img_title'=>$request->img_title,
             'img_body'=>$request->img_body,
-            'icon'=>$icon_name,
+            'icon'=>'icon_image/'.$icon_name,
             'client_count'=>$request->client_count,
             'client_desc'=>$request->client_desc
         ]);
        
         if($result){
             return response()->json([
+                'status'=>200,
                 'message'=>'About data created successfully..'
             ]);
         }
         return response()->json([
+            'status'=>201,
             'message'=>'Failed to create about content..'
         ]);
 
@@ -100,6 +108,7 @@ class AboutController extends Controller
     $about=About::find($id);
     if(!$about){
         return response()->json([
+            'status'=>201,
             'message'=>'Content not available..'
         ]);
     }
@@ -110,10 +119,10 @@ class AboutController extends Controller
        
        $result= $about->update([
             'description'=>$request->description,
-            'image'=>$image_name,
+            'image'=>'about_image/'.$image_name,
             'img_title'=>$request->img_title,
             'img_body'=>$request->img_body,
-            'icon'=>$icon_name,
+            'icon'=>'icon_image/'.$icon_name,
             'client_count'=>$request->client_count,
             'client_desc'=>$request->client_desc
         ]);
@@ -121,10 +130,12 @@ class AboutController extends Controller
     
     if($result){
         return response()->json([
+            'status'=>200,
             'message'=>'Updated successfully....'
         ]);
     }
     return response()->json([
+        'status'=>201,
         'message'=>'Fail to update....'
     ]);
 
@@ -144,9 +155,11 @@ class AboutController extends Controller
         $result=About::destroy($id);
         if($result){
           return response()->json([
+            'status'=>200,
               'message'=>'Deleted Successfully..'
           ]);
       return response()->json([
+        'status'=>201,
           'message'=>'Failed to delete..'
       ]);
       }   

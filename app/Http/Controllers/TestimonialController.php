@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\TestimonialResource;
 use App\Models\Testimonial;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,11 @@ class TestimonialController extends Controller
      */
     public function index()
     {
-        return Testimonial::all();
+        $testimonial=Testimonial::all();
+        return response()->json([
+            'status'=>200,
+            'message'=>TestimonialResource::collection($testimonial)
+        ]);
     }
 
     /**
@@ -35,8 +40,7 @@ class TestimonialController extends Controller
         $testimonial = Testimonial::create($validatedData);
     
         return response()->json([
-            'message' => 'Testimonial created successfully.',
-            'data' => $testimonial,
+            'message' => 'Testimonial created successfully.'
         ], 201);
     }
 
@@ -51,7 +55,7 @@ class TestimonialController extends Controller
         $testimonial = Testimonial::findOrFail($id);
 
     return response()->json([
-        'data' => $testimonial,
+       'message'=>'testimonial created successfully..'
     ], 200);
     }
 
@@ -75,8 +79,8 @@ class TestimonialController extends Controller
         $testimonial->update($validatedData);
     
         return response()->json([
-            'message' => 'Testimonial updated successfully.',
-            'data' => $testimonial,
+            'message' => 'Testimonial updated successfully.'
+           
         ], 200);
     }
 
