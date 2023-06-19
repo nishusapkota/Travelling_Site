@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\PortraitImage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Destination extends Model
 {
@@ -29,6 +30,9 @@ class Destination extends Model
 
     function coverPhotos(){
         return $this->hasMany('\App\Models\CoverPhoto');
+    }
+    function portraitImages(){
+        return $this->hasMany('PortraitImage');
     }
     function topDestination(){
         return $this->belongsTo('\App\Models\TopDestination');
