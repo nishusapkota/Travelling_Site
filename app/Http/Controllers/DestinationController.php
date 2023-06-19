@@ -33,6 +33,7 @@ class DestinationController extends Controller
         $request->validate([
             'title'=>'required',
             'image'=>'required|image|mimes:png,jpg,jpeg',
+            'short_description'=>'required',
             'description'=>'required',
             'package_categories_id'=>'nullable|array',      
             'package_categories_id.*'=>'exists:package_categories,id',
@@ -45,6 +46,7 @@ class DestinationController extends Controller
        $result= $destination->create([
         'title'=>$request->title,
             'image'=>'destination_image/'.$image_name,
+            'short_description'=>$request->short_description,
             'description'=>$request->description
         ]);
         $result->packageCategories()->attach($request->package_categories_id);
@@ -96,9 +98,10 @@ class DestinationController extends Controller
         $request->validate([
             'title'=>'required',
             'image'=>'required|image|mimes:png,jpg,jpeg',
+            'short_description'=>'required',
             'description'=>'required',
-            'package_categories_id'=>'required|array',      
-            'package_categories_id.*'=>'required|exists:package_categories,id',
+            'package_categories_id'=>'nullable|array',      
+            'package_categories_id.*'=>'exists:package_categories,id',
         ]);
        
         $destination=Destination::find($id);
@@ -116,6 +119,7 @@ class DestinationController extends Controller
         $result=$destination->update([
             'title'=>$request->title,
             'image'=>'destination_image/'.$image_name,
+            'short_description'=>$request->short_description,
             'description'=>$request->description 
         ]);
         if($result){

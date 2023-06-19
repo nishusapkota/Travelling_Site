@@ -56,3 +56,10 @@ Route::post('top-destination',[\App\Http\Controllers\FrontendController::class,'
 Route::get('top-destination',[\App\Http\Controllers\FrontendController::class,'readTopDestination']);
 Route::patch('top-destination/{id}',[\App\Http\Controllers\FrontendController::class,'updateTopDestination']);
 Route::delete('top-destination/{id}',[\App\Http\Controllers\FrontendController::class,'deleteTopDestination']);
+
+
+
+//FRONTEND no auth
+Route::group(['prefix' => 'frontend'], function () {
+    Route::get('packages/{id}', [\App\Http\Controllers\FrontendController::class, 'packageByCatagory']);
+});
