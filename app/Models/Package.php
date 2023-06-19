@@ -27,4 +27,7 @@ class Package extends Model
     function destination(){
         return $this->belongTo('\App\Models\Destination');
     }
+    function packageInDemand(){
+        return $this->belongsTo('\App\Models\PackagesInDemand');
+    }
 }

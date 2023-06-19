@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Destination;
 use Illuminate\Http\Request;
 use App\Models\PackageCategory;
+use App\Models\PackagesInDemand;
 use App\Http\Resources\DestinationResource;
 use App\Http\Resources\DestinationListResource;
+use App\Http\Resources\PackageInDemandResource;
 use App\Http\Resources\PackageCategoryListResource;
 
 class FrontendController extends Controller
@@ -61,4 +63,59 @@ function destinationByCatagory($id) {
     ]);
 
 }
+
+public function createPackageInDemand(Request $request)
+    {
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'package_id' => 'required|exists:packages,id',
+        ]);
+
+        // Create a new record in the 'packages_in_demands' table
+        $packageInDemand = PackagesInDemand::create([
+            'package_id' => $validatedData['package_id'],
+        ]);
+
+        // Return a JSON response indicating success
+        return response()->json([
+            'status'=>200,
+            'message' => 'Package in demand created successfully']);
+    }
+    function readPackageInDemand() {
+        return PackageInDemandResource::collection(PackagesInDemand::paginate(2));
+    }
+    public function updatePackageInDemand(Request $request, $id)
+    {
+        $validatedData = $request->validate([
+            'package_id' => 'required|exists:packages,id',
+        ]);
+        // Find the package in demand record by ID
+        $packageInDemand = PackagesInDemand::findOrFail($id);
+
+        // Validate the incoming request data
+        
+
+        // Update the package in demand record
+        $packageInDemand->package_id = $validatedData['package_id'];
+        $packageInDemand->save();
+
+        // Return a JSON response indicating success
+        return response()->json([
+            'status'=>201,
+            'message' => 'Package in demand updated successfully']);
+    }
+    public function deletePackageInDemand($id)
+    {
+        // Find the package in demand record by ID
+        $packageInDemand = PackagesInDemand::findOrFail($id);
+
+        // Delete the package in demand record
+        $packageInDemand->delete();
+
+        // Return a JSON response indicating success
+        return response()->json([
+            'status'=>201,
+            'message' => 'Package in demand deleted successfully']);
+    }
+
 }
