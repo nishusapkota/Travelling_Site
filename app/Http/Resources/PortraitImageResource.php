@@ -17,7 +17,6 @@ class PortraitImageResource extends JsonResource
         return [
             'title'=>$this->title,
             'image'=>asset($this->image),
-            'short_description'=>$this->short_description,
             'destination_id'=>$this->destination_id
         ];
     }

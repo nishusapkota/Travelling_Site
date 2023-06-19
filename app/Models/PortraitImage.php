@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class PortraitImage extends Model
 {
     use HasFactory;
-    protected $fillable=[ 'title','image','destination_id','short_description'];
+    protected $fillable=[ 'title','image','destination_id'];
     function destination(){
         $this->belongsTo('\App\Models\Destination');
     }

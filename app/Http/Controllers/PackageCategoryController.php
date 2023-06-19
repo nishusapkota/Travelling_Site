@@ -39,6 +39,7 @@ class PackageCategoryController extends Controller
             'title'=>'required',
             'image'=>'required|image|mimes:png,jpg,jpeg',
             'description'=>'required',
+            'short_description'=>'nullable',
             'destinations_id'=>'required|array',      
             'destinations_id.*'=>'required|exists:destinations,id',      
             
@@ -52,7 +53,9 @@ class PackageCategoryController extends Controller
         'title'=>$request->title,
             'image'=>'category_image/'.$image_name,
             'description'=>$request->description,
-           
+            
+           'short_description'=>$request->has('short_description')?
+           $request->short_description : null
         ]);
         // dd($result);
         // $destinationid = collect(Destination::all())->pluck('id')->toArray();
@@ -110,6 +113,7 @@ class PackageCategoryController extends Controller
             'title'=>'required',
             'image'=>'required|image|mimes:png,jpg,jpeg',
             'description'=>'required',
+            'short_description'=>'nullable',
             'destinations_id'=>'required|array',
             'destinations_id.*'=>'required|exists:destinations,id',      
 
@@ -130,6 +134,8 @@ class PackageCategoryController extends Controller
             'title'=>$request->title,
             'image'=>'category_image/'.$image_name,
             'description'=>$request->description,
+            'short_description'=>$request->has('short_description')?
+           $request->short_description : null
         ]);
         if($result){
             return response()->json([

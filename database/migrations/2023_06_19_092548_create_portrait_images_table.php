@@ -17,7 +17,6 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('image');
-            $table->text('short_description');
             $table->unsignedBigInteger('destination_id');
             $table->foreign('destination_id')->references('id')->on('destinations');
             $table->timestamps();

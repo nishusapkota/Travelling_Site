@@ -18,7 +18,8 @@ class PackageCategoryResource extends JsonResource
             'id'=>$this->id,
             'title'=>$this->title, 
             'image'=>asset($this->image),
-            'description'=>$this->description
+            'description'=>$this->description,
+            'short_description'=>is_null($this->short_description)?null : $this->short_description
         ];
     }
 }

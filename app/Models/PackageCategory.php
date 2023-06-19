@@ -12,7 +12,8 @@ class PackageCategory extends Model
     protected $fillable=[
         'title',
         'image',
-        'description'
+        'description',
+        'short_description'
     ];
     function destinations()
     {

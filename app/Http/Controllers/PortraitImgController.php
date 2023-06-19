@@ -31,7 +31,7 @@ class PortraitImgController extends Controller
             'title' => 'required',
             'image' => 'required|image',
             //dimensions:min_width=100,min_height=100,max_width=1000,max_height=1000'
-            'short_description' => 'nullable',
+            
             'destination_id' => 'required|exists:destinations,id',
         ]);
 
@@ -47,7 +47,7 @@ class PortraitImgController extends Controller
         $Photo->create([
             'title' => $request->input('title'),
             'image' => 'portrait_image/' . $ImageName,
-            'short_description' => $request->short_description,
+            
             'destination_id' => $request->input('destination_id')
         ]);
         return response()->json(['message' => 'portrait photo created successfully'], 201);
@@ -75,8 +75,8 @@ class PortraitImgController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required',
-            'cover_image' => 'required|image',
-            'short_description' => 'nullable',
+            'image' => 'required|image',
+           
             'destination_id' => 'required|exists:destinations,id',
         ]);
 
@@ -97,7 +97,7 @@ class PortraitImgController extends Controller
         $Photo->update([
             'title' => $request->input('title'),
             'image' => 'portrait_image/' . $ImageName,
-            'short_description' => $request->short_description,
+           
             'destination_id' => $request->input('destination_id')
         ]);
         return response()->json(['message' => 'photo updated successfully'], 200);
