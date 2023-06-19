@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Destination;
 use Illuminate\Http\Request;
+use App\Models\TopDestination;
 use App\Models\PackageCategory;
 use App\Models\PackagesInDemand;
 use App\Http\Resources\DestinationResource;
+use App\Http\Resources\TopDestinationResource;
 use App\Http\Resources\DestinationListResource;
 use App\Http\Resources\PackageInDemandResource;
 use App\Http\Resources\PackageCategoryListResource;
@@ -116,6 +118,61 @@ public function createPackageInDemand(Request $request)
         return response()->json([
             'status'=>201,
             'message' => 'Package in demand deleted successfully']);
+    }
+
+
+    public function createTopDestination(Request $request)
+    {
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'destination_id' => 'required|exists:destinations,id',
+        ]);
+
+        // Create a new record in the 'packages_in_demands' table
+        $topDestination = TopDestination::create([
+            'destination_id' => $validatedData['destination_id'],
+        ]);
+
+        // Return a JSON response indicating success
+        return response()->json([
+            'status'=>200,
+            'message' => 'Top Destination created successfully']);
+    }
+    function readTopDestination() {
+        return TopDestinationResource::collection(TopDestination::paginate(2));
+    }
+    public function updateTopDestination(Request $request, $id)
+    {
+        $validatedData = $request->validate([
+            'destination_id' => 'required|exists:destinations,id',
+        ]);
+        // Find the package in demand record by ID
+        $topDestination = TopDestination::findOrFail($id);
+
+        // Validate the incoming request data
+        
+
+        // Update the package in demand record
+        $topDestination->destination_id = $validatedData['destination_id'];
+        $topDestination->update();
+
+        // Return a JSON response indicating success
+        return response()->json([
+            'status'=>201,
+            'message' => 'updated successfully']);
+    }
+    public function deleteTopDestination($id)
+    {
+        // Find the package in demand record by ID
+        $result = TopDestination::findOrFail($id);
+
+        // Delete the package in demand record
+        $result->delete();
+
+        // Return a JSON response indicating success
+        return response()->json([
+            'status'=>201,
+            'message' => 'deleted successfully']);
     }
 
 }

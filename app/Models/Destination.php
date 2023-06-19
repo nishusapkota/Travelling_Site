@@ -29,4 +29,7 @@ class Destination extends Model
     function coverPhotos(){
         return $this->hasMany('\App\Models\CoverPhoto');
     }
+    function topDestination(){
+        return $this->belongsTo('\App\Models\TopDestination');
+    }
 }

@@ -51,3 +51,8 @@ Route::post('package-in-demand',[\App\Http\Controllers\FrontendController::class
 Route::get('package-in-demand',[\App\Http\Controllers\FrontendController::class,'readPackageInDemand']);
 Route::patch('package-in-demand/{id}',[\App\Http\Controllers\FrontendController::class,'updatePackageInDemand']);
 Route::delete('package-in-demand/{id}',[\App\Http\Controllers\FrontendController::class,'deletePackageInDemand']);
+//top destination
+Route::post('top-destination',[\App\Http\Controllers\FrontendController::class,'createTopDestination']);
+Route::get('top-destination',[\App\Http\Controllers\FrontendController::class,'readTopDestination']);
+Route::patch('top-destination/{id}',[\App\Http\Controllers\FrontendController::class,'updateTopDestination']);
+Route::delete('top-destination/{id}',[\App\Http\Controllers\FrontendController::class,'deleteTopDestination']);
