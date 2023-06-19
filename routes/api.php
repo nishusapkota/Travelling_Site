@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\CoverPhotoController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\SocialMediaController;
 
@@ -43,5 +44,5 @@ Route::get('destination-by-things-to-do/{id}',[\App\Http\Controllers\FrontendCon
 
 
 //cover images
-
+Route::apiResource('cover-photo','\App\Http\Controllers\CoverPhotoController');
 //protrait

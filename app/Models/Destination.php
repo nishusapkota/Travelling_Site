@@ -25,4 +25,8 @@ class Destination extends Model
     function packages(){
         return $this->hasMany('\App\Models\Package');
     }
+
+    function coverPhotos(){
+        return $this->hasMany('\App\Models\CoverPhoto');
+    }
 }
