@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\FrontendController;
+use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\CoverPhotoController;
 use App\Http\Controllers\PortraitImgController;
 use App\Http\Controllers\SocialMediaController;
@@ -20,17 +21,20 @@ use App\Http\Controllers\SocialMediaController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::post('register', [RegisterController::class, 'register']);
+Route::post('login', [RegisterController::class, 'login']);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['middleware' => 'auth'], function () {
+    Route::apiResource('destination','\App\Http\Controllers\DestinationController');
+
 });
+
 Route::apiResource('messages','\App\Http\Controllers\MessageController');
 Route::apiResource('blog','\App\Http\Controllers\BlogController');
 Route::apiResource('about','\App\Http\Controllers\AboutController');
 Route::get('socialmedia',[SocialMediaController::class,'index']);
 Route::patch('socialmedia/{id}',[SocialMediaController::class,'update']);
 Route::apiResource('contact','\App\Http\Controllers\ContactController');
-Route::apiResource('destination','\App\Http\Controllers\DestinationController');
 Route::apiResource('things-to-do','\App\Http\Controllers\PackageCategoryController');
 Route::apiResource('package','\App\Http\Controllers\PackageController');
 Route::apiResource('package-included','\App\Http\Controllers\PackageIncludedController');
