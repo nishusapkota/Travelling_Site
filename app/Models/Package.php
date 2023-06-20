@@ -9,7 +9,7 @@ class Package extends Model
 {
     use HasFactory;
     protected $fillable=[
-        'title',
+        'location',
         'image',
         'package_category_id',
         'price',
@@ -25,7 +25,7 @@ class Package extends Model
         return $this->hasMany('\App\Models\PackageIncluded');
     }
     function destination(){
-        return $this->belongTo('\App\Models\Destination');
+        return $this->belongsTo(Destination::class,'destinations_id');
     }
     function packageInDemand(){
         return $this->belongsTo('\App\Models\PackagesInDemand');

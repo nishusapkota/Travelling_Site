@@ -15,7 +15,8 @@ class PackageController extends Controller
      */
     public function index()
     {
-        $package=Package::all();
+        $package=Package::with('destination')->get();
+        // dd($package);
         return response()->json([
             'status'=>200,
             'data'=>PackageResource::collection($package)
@@ -31,7 +32,7 @@ class PackageController extends Controller
     public function store(Request $request,Package $package)
     {
         $request->validate([
-            'title'=>'required',
+            'location'=>'required',
             'image'=>'required|image|mimes:png,jpg,jpeg',
             'price'=>'required',
             'overview'=>'required',
@@ -45,7 +46,7 @@ class PackageController extends Controller
         $request->file('image')->move(public_path('package_image'),$image_name);
         
        $result=$package->create([
-        'title'=>$request->title,
+        'location'=>$request->location,
         'image'=>'package_image/'.$image_name,
         'price'=>$request->price,
         'overview'=>$request->overview,
@@ -95,7 +96,7 @@ class PackageController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'title'=>'required',
+            'location'=>'required',
             'image'=>'required|image|mimes:png,jpg,jpeg',
             'price'=>'required',
             'overview'=>'required',
@@ -112,7 +113,7 @@ class PackageController extends Controller
             $request->file('image')->move(public_path('package_image'),$image_name);
             $package->packageCategories()->sync($request->package_categories_id);
            $result=$package->update([
-            'title'=>$request->title,
+            'location'=>$request->location,
             'image'=>'package_image'.$image_name,
             'price'=>$request->price,
             'overview'=>$request->overview,

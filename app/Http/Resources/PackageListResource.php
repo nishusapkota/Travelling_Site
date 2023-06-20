@@ -17,7 +17,7 @@ class PackageListResource extends JsonResource
         return 
         [
             'id'=>$this->id,
-            'title'=>$this->title,
+            'location'=>$this->location,
             'image'=>asset($this->image),
             'price'=>$this->price,
             'review'=>$this->review,
