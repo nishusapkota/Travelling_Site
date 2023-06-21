@@ -15,7 +15,8 @@ class PackageIncludedResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'package_id'=>$this->package_id,
+            'package_location'=>$this->package->location,
+            'package_duration'=>$this->package->duration,
             'description'=>$this->description
         ];
     }

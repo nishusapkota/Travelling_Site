@@ -17,7 +17,7 @@ class ItineraryResource extends JsonResource
         return [
             'title'=>$this->title,
             'description'=>$this->description,
-            'package_id'=>$this->package_id,
+            'package'=>$this->package->location,
             'body'=>$this->body
         ];
     }

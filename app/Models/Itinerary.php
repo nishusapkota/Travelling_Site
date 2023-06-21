@@ -14,4 +14,7 @@ class Itinerary extends Model
         'package_id',
         'body'
     ];
+    function package(){
+        return $this->belongsTo('\App\Models\Package');
+    }
 }

@@ -21,9 +21,9 @@ class RegisterController extends Controller
             'password' => bcrypt($request->password)
         ]);
        
-        $token = $user->createToken('LaravelAuthApp')->accessToken;
+        
  
-        return response()->json(['token' => $token], 200);
+        return response()->json(['message' => 'user registered successfully'], 200);
     }
     function login(Request $request){
         $data = [

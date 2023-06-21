@@ -15,7 +15,7 @@ class PackageIncludedController extends Controller
      */
     public function index()
     {
-        $packageinclude=PackageIncluded::all();
+        $packageinclude=PackageIncluded::with('package')->get();
         return PackageIncludedResource::collection($packageinclude);
     }
 

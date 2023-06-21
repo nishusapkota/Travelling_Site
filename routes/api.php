@@ -7,6 +7,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\CoverPhotoController;
+use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\PortraitImgController;
 use App\Http\Controllers\SocialMediaController;
 
@@ -21,48 +22,52 @@ use App\Http\Controllers\SocialMediaController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
 
-Route::group(['middleware' => 'auth'], function () {
-    Route::apiResource('destination','\App\Http\Controllers\DestinationController');
 
-});
+Route::apiResource('destination', DestinationController::class);
+Route::apiResource('messages', '\App\Http\Controllers\MessageController');
+Route::apiResource('blog', '\App\Http\Controllers\BlogController');
+Route::apiResource('about', '\App\Http\Controllers\AboutController');
+Route::get('socialmedia', [SocialMediaController::class, 'index']);
+Route::patch('socialmedia/{id}', [SocialMediaController::class, 'update']);
+Route::apiResource('contact', '\App\Http\Controllers\ContactController');
+Route::apiResource('things-to-do', '\App\Http\Controllers\PackageCategoryController');
+Route::apiResource('package', '\App\Http\Controllers\PackageController');
+Route::apiResource('package-included', '\App\Http\Controllers\PackageIncludedController');
+Route::apiResource('itinerary', '\App\Http\Controllers\ItineraryController');
+Route::apiResource('testimonial', '\App\Http\Controllers\TestimonialController');
 
-Route::apiResource('messages','\App\Http\Controllers\MessageController');
-Route::apiResource('blog','\App\Http\Controllers\BlogController');
-Route::apiResource('about','\App\Http\Controllers\AboutController');
-Route::get('socialmedia',[SocialMediaController::class,'index']);
-Route::patch('socialmedia/{id}',[SocialMediaController::class,'update']);
-Route::apiResource('contact','\App\Http\Controllers\ContactController');
-Route::apiResource('things-to-do','\App\Http\Controllers\PackageCategoryController');
-Route::apiResource('package','\App\Http\Controllers\PackageController');
-Route::apiResource('package-included','\App\Http\Controllers\PackageIncludedController');
-Route::apiResource('itinerary','\App\Http\Controllers\ItineraryController');
-Route::apiResource('testimonial','\App\Http\Controllers\TestimonialController');
 
-Route::get('destination-list',[\App\Http\Controllers\FrontendController::class,'destination_list']);
-Route::get('things-to-do-list',[\App\Http\Controllers\FrontendController::class,'package_category_list']);
-Route::get('things-to-do-by-destination/{destination_id}',[\App\Http\Controllers\FrontendController::class,
-'package_category']);
-Route::get('destination-by-things-to-do/{id}',[\App\Http\Controllers\FrontendController::class,
-'destinationByCatagory']);
+
+Route::get('destination-list', [\App\Http\Controllers\FrontendController::class, 'destination_list']);
+Route::get('things-to-do-list', [\App\Http\Controllers\FrontendController::class, 'package_category_list']);
+Route::get('things-to-do-by-destination/{destination_id}', [
+    \App\Http\Controllers\FrontendController::class,
+    'package_category'
+]);
+Route::get('destination-by-things-to-do/{id}', [
+    \App\Http\Controllers\FrontendController::class,
+    'destinationByCatagory'
+]);
 
 
 //cover images
-Route::apiResource('cover-photo','\App\Http\Controllers\CoverPhotoController');
+Route::apiResource('cover-photo', '\App\Http\Controllers\CoverPhotoController');
 //portrait images
-Route::apiResource('portrait-image','\App\Http\Controllers\PortraitImgController');
+Route::apiResource('portrait-image', '\App\Http\Controllers\PortraitImgController');
 //packages in demand
-Route::post('package-in-demand',[\App\Http\Controllers\FrontendController::class,'createPackageInDemand']);
-Route::get('package-in-demand',[\App\Http\Controllers\FrontendController::class,'readPackageInDemand']);
-Route::patch('package-in-demand/{id}',[\App\Http\Controllers\FrontendController::class,'updatePackageInDemand']);
-Route::delete('package-in-demand/{id}',[\App\Http\Controllers\FrontendController::class,'deletePackageInDemand']);
+Route::post('package-in-demand', [\App\Http\Controllers\FrontendController::class, 'createPackageInDemand']);
+Route::get('package-in-demand', [\App\Http\Controllers\FrontendController::class, 'readPackageInDemand']);
+Route::patch('package-in-demand/{id}', [\App\Http\Controllers\FrontendController::class, 'updatePackageInDemand']);
+Route::delete('package-in-demand/{id}', [\App\Http\Controllers\FrontendController::class, 'deletePackageInDemand']);
 //top destination
-Route::post('top-destination',[\App\Http\Controllers\FrontendController::class,'createTopDestination']);
-Route::get('top-destination',[\App\Http\Controllers\FrontendController::class,'readTopDestination']);
-Route::patch('top-destination/{id}',[\App\Http\Controllers\FrontendController::class,'updateTopDestination']);
-Route::delete('top-destination/{id}',[\App\Http\Controllers\FrontendController::class,'deleteTopDestination']);
+Route::post('top-destination', [\App\Http\Controllers\FrontendController::class, 'createTopDestination']);
+Route::get('top-destination', [\App\Http\Controllers\FrontendController::class, 'readTopDestination']);
+Route::patch('top-destination/{id}', [\App\Http\Controllers\FrontendController::class, 'updateTopDestination']);
+Route::delete('top-destination/{id}', [\App\Http\Controllers\FrontendController::class, 'deleteTopDestination']);
 
 
 
@@ -70,3 +75,6 @@ Route::delete('top-destination/{id}',[\App\Http\Controllers\FrontendController::
 Route::group(['prefix' => 'frontend'], function () {
     Route::get('packages/{id}', [\App\Http\Controllers\FrontendController::class, 'packageByCatagory']);
 });
+Route::get('/testingg', function () {
+    dd(auth());
+})->middleware('auth');
