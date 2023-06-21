@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Http\Resources\DestinationResource;
+use App\Models\CoverPhoto;
 use App\Models\Destination;
 use App\Models\PackageCategory;
 use Illuminate\Http\Request;
@@ -30,15 +31,7 @@ class DestinationController extends Controller
      */
     public function store(Request $request,Destination $destination)
     {
-        $request->validate([
-            'title'=>'required',
-            'image'=>'required|image|mimes:png,jpg,jpeg',
-            'short_description'=>'required',
-            'description'=>'required',
-            'package_categories_id'=>'nullable|array',      
-            'package_categories_id.*'=>'exists:package_categories,id',
-            
-        ]);
+        
 
         $image_name=time().".".$request->file('image')->getClientOriginalExtension();
         $request->file('image')->move(public_path('destination_image'),$image_name);
@@ -50,7 +43,17 @@ class DestinationController extends Controller
             'description'=>$request->description
         ]);
         $result->packageCategories()->attach($request->package_categories_id);
-
+        foreach ($request->cover_title as $key => $cover) {
+            $coverImage = $request->file('cover_image')[$key];
+            $coverImageName = time() . '_' . $coverImage->getClientOriginalName();
+            $coverImage->move(public_path('cover_image'),$coverImageName);
+            CoverPhoto::create([
+            'title'=>$cover,
+            'location'=>$request->location[$key],
+            'cover_image'=>'cover_image/'.$coverImageName,
+            'destination_id'=>$result->id
+        ]);
+        }
        // $packageCategoryid=[1,2];
        // $destination->packageCategories()->attach($request->package_categories_id);
 

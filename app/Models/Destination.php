@@ -12,10 +12,11 @@ class Destination extends Model
 {
     use HasFactory;
     protected $fillable=[
-        'title',
-        'image',
+        'destination',
+        'portrait_image',
         'description',
-        'short_description'
+        'short_description',
+        'package_category'
     ];
 
     function packageCategories()

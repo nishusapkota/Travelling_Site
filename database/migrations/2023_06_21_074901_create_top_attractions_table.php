@@ -13,12 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('portrait_images', function (Blueprint $table) {
+        Schema::create('top_attractions', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('image');
-            $table->unsignedBigInteger('destination_id');
-            $table->foreign('destination_id')->references('id')->on('destinations');
+            $table->unsignedBiginteger('destination_id')->unsigned();
+            $table->foreign('destination_id')->references('id')->on('destinations')->onDelete('cascade');
+            $table->json('tags');
+            $table->string('name');
+            $table->string('link');
             $table->timestamps();
         });
     }
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('portrait_images');
+        Schema::dropIfExists('top_attractions');
     }
 };
