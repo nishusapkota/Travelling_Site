@@ -24,13 +24,16 @@ class DestinationStoreRequest extends FormRequest
     public function rules()
     {
         return [
-                'title'=>'required',
-                'image'=>'required|image|mimes:png,jpg,jpeg',
-                'short_description'=>'required',
+                'destination'=>'required',
+                'portrait_image'=>'required|image|mimes:png,jpg,jpeg',
+                'location'=>'required',
+                'cover_image'=>'required|image|mimes:png,jpg,jpeg',
+                'short_description'=>'nullable',
                 'description'=>'required',
                 'package_categories_id'=>'nullable|array',      
                 'package_categories_id.*'=>'nullable|exists:package_categories,id',
-                'location'=>'re|exists:package_categories,id',
+                
+
         ];
     }
 }

@@ -9,7 +9,7 @@ class CoverPhoto extends Model
 {
     use HasFactory;
     protected $fillable=[
-        'title','cover_image','destination_id'
+        'location','cover_image','destination_id'
     ];
     function destination(){
         $this->belongsTo('\App\Models\Destination');

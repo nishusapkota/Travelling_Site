@@ -29,46 +29,42 @@ class DestinationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request,Destination $destination)
-    {
-        
+    public function store(Request $request, Destination $destination)
+{
+    $image_name = time() . "." . $request->file('portrait_image')->getClientOriginalExtension();
+    $request->file('portrait_image')->move(public_path('portrait_image'), $image_name);
 
-        $image_name=time().".".$request->file('image')->getClientOriginalExtension();
-        $request->file('image')->move(public_path('destination_image'),$image_name);
+    $result = $destination->create([
+        'destination' => $request->destination,
+        'portrait_image' => 'portrait_image/' . $image_name,
+        'short_description' => $request->short_description ?: null,
+        'description' => $request->description
+    ]);
+    $result->packageCategories()->attach($request->package_categories_id);
 
-       $result= $destination->create([
-        'title'=>$request->title,
-            'image'=>'destination_image/'.$image_name,
-            'short_description'=>$request->short_description,
-            'description'=>$request->description
+    foreach ($request->file('cover_image') as $key => $coverImage) {
+        $coverImageName = time() . '_' . $coverImage->getClientOriginalName();
+        $coverImage->move(public_path('cover_image'), $coverImageName);
+        CoverPhoto::create([
+            'location' => $request->location[$key],
+            'cover_image' => 'cover_image/' . $coverImageName,
+            'destination_id' => $result->id
         ]);
-        $result->packageCategories()->attach($request->package_categories_id);
-        foreach ($request->cover_title as $key => $cover) {
-            $coverImage = $request->file('cover_image')[$key];
-            $coverImageName = time() . '_' . $coverImage->getClientOriginalName();
-            $coverImage->move(public_path('cover_image'),$coverImageName);
-            CoverPhoto::create([
-            'title'=>$cover,
-            'location'=>$request->location[$key],
-            'cover_image'=>'cover_image/'.$coverImageName,
-            'destination_id'=>$result->id
-        ]);
-        }
-       // $packageCategoryid=[1,2];
-       // $destination->packageCategories()->attach($request->package_categories_id);
-
-        if($result){
-            return response()->json([
-                'status'=>200,
-                'message'=>'Destination created successfully..'
-            ]);
-        }
-        return response()->json([
-            'status'=>201,
-            'message'=>'Failed to create destination..'
-        ]);
-
     }
+
+    if ($result) {
+        return response()->json([
+            'status' => 200,
+            'message' => 'Destination created successfully.'
+        ]);
+    }
+
+    return response()->json([
+        'status' => 201,
+        'message' => 'Failed to create destination.'
+    ]);
+}
+
 
     /**
      * Display the specified resource.

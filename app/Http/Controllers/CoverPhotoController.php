@@ -26,30 +26,7 @@ class CoverPhotoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'title' => 'required',
-            'cover_image' => 'required|image',
-            'destination_id' => 'required|exists:destinations,id',
-        ]);
     
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
-        }
-    
-        $coverPhoto = new CoverPhoto();
-        $coverImage = $request->file('cover_image');
-            $coverImageName = time() . '_' . $coverImage->getClientOriginalName();
-            $coverImage->move(public_path('cover_image'),$coverImageName);
-            $coverPhoto->cover_image = $coverImageName;
-        $coverPhoto->create([
-            'title'=>$request->input('title'),
-            'cover_image'=>'cover_image/'.$coverImageName,
-            'destination_id'=>$request->input('destination_id')
-        ]);
-        return response()->json(['message' => 'Cover photo created successfully'], 201);
-    }
     
 
     /**
