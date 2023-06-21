@@ -8,6 +8,7 @@ use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\CoverPhotoController;
 use App\Http\Controllers\DestinationController;
+use App\Http\Controllers\FaqController;
 use App\Http\Controllers\PortraitImgController;
 use App\Http\Controllers\SocialMediaController;
 
@@ -28,6 +29,8 @@ Route::post('login', [RegisterController::class, 'login']);
 
 
 Route::apiResource('destination', DestinationController::class);
+Route::apiResource('faq', FaqController::class);
+
 Route::apiResource('messages', '\App\Http\Controllers\MessageController');
 Route::apiResource('blog', '\App\Http\Controllers\BlogController');
 Route::apiResource('about', '\App\Http\Controllers\AboutController');

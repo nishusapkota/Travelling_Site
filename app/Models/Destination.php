@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\FAQ;
 use App\Models\PortraitImage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -22,6 +23,9 @@ class Destination extends Model
         return $this->belongsToMany(PackageCategory::class,
         'destination_package_categories','destinations_id',
         'package_categories_id');
+    }
+    function faqs() {
+        return $this->hasMany('FAQ::class');
     }
     
     function packages(){
