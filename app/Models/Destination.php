@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\FAQ;
+use App\Models\TripEnquiry;
 use App\Models\PortraitImage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -41,5 +42,8 @@ class Destination extends Model
     }
     function topDestination(){
         return $this->belongsTo('\App\Models\TopDestination');
+    }
+    function tripEnquiries(){
+        return $this->hasMany('TripEnquiry::class');
     }
 }

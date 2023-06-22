@@ -76,9 +76,10 @@ Route::delete('package-in-demand/{id}', [\App\Http\Controllers\FrontendControlle
 Route::post('top-destination', [\App\Http\Controllers\FrontendController::class, 'createTopDestination']);
 Route::patch('top-destination/{id}', [\App\Http\Controllers\FrontendController::class, 'updateTopDestination']);
 Route::delete('top-destination/{id}', [\App\Http\Controllers\FrontendController::class, 'deleteTopDestination']);
-//top-enquiries
+//tour-enquiries
 Route::apiResource('tour-enquiry', '\App\Http\Controllers\TourEnquiryController');
-
+//trip-enquiries
+Route::apiResource('trip-enquiry', '\App\Http\Controllers\TripEnquiryController');
 
 
 //FRONTEND no auth

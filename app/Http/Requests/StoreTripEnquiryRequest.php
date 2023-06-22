@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class StoreTripEnquiryRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
+    {
+        return [
+        'name'=>'required',
+        'email'=>'required|email',
+        'mobile_num'=>'required|numeric|digits:10',
+        'group_size'=>'required',
+        'travel_dates'=>'required|date',
+        'destination_id'=>'nullable|exists:destinations,id',
+        'estimate_budget'=>'required',
+        'budget_flexible'=>'required|boolean',
+        'primary_age'=>'required',
+        'experience'=>'nullable'
+        ];
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, mixed>
+     */
+    public function rules()
+    {
+        return [
+            //
+        ];
+    }
+}
