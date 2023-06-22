@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class TopAttraction extends Model
 {
     use HasFactory;
+    protected $fillable=[
+        'destination_id',
+        'tags',
+        'name',
+        'link'
+    ];
+
 }

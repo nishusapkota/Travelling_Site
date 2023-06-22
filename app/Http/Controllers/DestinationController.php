@@ -1,11 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Http\Resources\DestinationResource;
 use App\Models\CoverPhoto;
 use App\Models\Destination;
-use App\Models\PackageCategory;
 use Illuminate\Http\Request;
+use App\Models\PackageCategory;
+use App\Http\Resources\DestinationResource;
+use App\Http\Requests\DestinationStoreRequest;
 
 class DestinationController extends Controller
 {
@@ -29,8 +30,9 @@ class DestinationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Destination $destination)
+    public function store(Request $request, Destination $destination,DestinationStoreRequest $req)
 {
+   // $req->validated();
     $image_name = time() . "." . $request->file('portrait_image')->getClientOriginalExtension();
     $request->file('portrait_image')->move(public_path('portrait_image'), $image_name);
 
@@ -93,47 +95,61 @@ class DestinationController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        $request->validate([
-            'title'=>'required',
-            'image'=>'required|image|mimes:png,jpg,jpeg',
-            'short_description'=>'required',
-            'description'=>'required',
-            'package_categories_id'=>'nullable|array',      
-            'package_categories_id.*'=>'exists:package_categories,id',
-        ]);
-       
-        $destination=Destination::find($id);
+{
+    $destination = Destination::find($id);
 
-        if(!$destination){
-            return response()->json([
-                'status'=>'201',
-                'message'=>"Record not available.."
-            ]);
-        }
-       $destination->packageCategories()->sync($request->package_categories_id);
-        $image_name=time().".".$request->file('image')->getClientOriginalExtension();
-        $request->file('image')->move(public_path('destination_image'),$image_name);
-       
-        $result=$destination->update([
-            'title'=>$request->title,
-            'image'=>'destination_image/'.$image_name,
-            'short_description'=>$request->short_description,
-            'description'=>$request->description 
-        ]);
-        if($result){
-            return response()->json([
-                'status'=>'200',
-                'message'=>'updated successfully....'
-            ]);
-        }
+    if (!$destination) {
         return response()->json([
-            'status'=>'201',
-            'message'=>'Fail to update ....'
+            'status' => 404,
+            'message' => 'Destination not found.',
         ]);
-
-
     }
+
+    // Update the destination details
+    if ($request->hasFile('portrait_image')) {
+        $imagePath = public_path($destination->portrait_image);
+        if (file_exists($imagePath)) {
+            unlink($imagePath);
+        }
+        $image_name = time() . '.' . $request->file('portrait_image')->getClientOriginalExtension();
+        $request->file('portrait_image')->move(public_path('portrait_image'), $image_name);
+        
+    }
+    $destination->update([
+        'destination' => $request->destination,
+        'short_description' => $request->short_description ?: null,
+        'description' => $request->description,
+        'portrait_image' => 'portrait_image/' . $image_name,
+    ]);
+
+    
+    
+
+    // Update the cover images
+    if ($request->hasFile('cover_image')) {
+        $coverImages = $request->file('cover_image');
+        $locations = $request->input('location');
+
+
+        // Store the updated cover images
+        foreach ($coverImages as $key => $coverImage) {
+            $coverImageName = time() . '_' . $coverImage->getClientOriginalName();
+            $coverImage->move(public_path('cover_image'), $coverImageName);
+            $destination->coverPhotos->update([
+                'location' => $locations[$key],
+                'cover_image' => 'cover_image/' . $coverImageName,
+                'destination_id' => $destination->id,
+            ]);
+        }
+    }
+
+    return response()->json([
+        'status' => 200,
+        'message' => 'Destination updated successfully.',
+        'destination' => $destination,
+    ]);
+}
+
 
     /**
      * Remove the specified resource from storage.
