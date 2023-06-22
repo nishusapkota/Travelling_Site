@@ -12,6 +12,7 @@ use App\Http\Controllers\CoverPhotoController;
 use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\PortraitImgController;
 use App\Http\Controllers\SocialMediaController;
+use App\Http\Controllers\TourEnquiryController;
 use App\Http\Controllers\TopAttractionController;
 
 /*
@@ -75,6 +76,8 @@ Route::delete('package-in-demand/{id}', [\App\Http\Controllers\FrontendControlle
 Route::post('top-destination', [\App\Http\Controllers\FrontendController::class, 'createTopDestination']);
 Route::patch('top-destination/{id}', [\App\Http\Controllers\FrontendController::class, 'updateTopDestination']);
 Route::delete('top-destination/{id}', [\App\Http\Controllers\FrontendController::class, 'deleteTopDestination']);
+//top-enquiries
+Route::apiResource('tour-enquiry', '\App\Http\Controllers\TourEnquiryController');
 
 
 
@@ -86,10 +89,5 @@ Route::group(['prefix' => 'frontend'], function () {
     Route::get('top-destination', [FrontendController::class,'readTopDestination']);
     Route::get('things-to-do-by-destination/{destination_id}', [FrontendController::class,'package_category']);
     Route::get('blog',[BlogController::class,'index']);
-
-
-
 });
-Route::get('/testingg', function () {
-    dd(auth());
-})->middleware('auth');
+

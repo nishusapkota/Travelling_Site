@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\TourEnquiry;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Package extends Model
 {
@@ -23,6 +24,9 @@ class Package extends Model
     }
     function packageincludes(){
         return $this->hasMany('\App\Models\PackageIncluded');
+    }
+    function tourEnquiries(){
+        return $this->hasMany('TourEnquiry::class');
     }
     function destination(){
         return $this->belongsTo(Destination::class,'destinations_id');
