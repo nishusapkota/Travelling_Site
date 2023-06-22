@@ -32,16 +32,16 @@ class MessageController extends Controller
     {
        $this->validate($request,[
         'name' => 'required',
-        'phone' => 'required',
+        'phone' => 'required|numeric|digits:10',
         'email' => 'required|email',
-        'message' => 'required'
+        'message' => 'nullable'
        ]);
 
-       $message=Message::create([
+    Message::create([
         'name'=> $request->name,
         'phone' => $request->phone,
         'email' => $request->email,
-        'message' => $request->message
+        'message' => $request->message ?:null
        ]);
 
        return response()->json(['message' => 'success'],200);
@@ -53,18 +53,7 @@ class MessageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        $message=Message::find($id);
-       
-        if($message){
-            return $message;
-        }
-        return response()->json([
-            'message'=>'Result Not Found...'
-        ]);
-        
-    }
+   
 
     /**
      * Update the specified resource in storage.
@@ -79,7 +68,7 @@ class MessageController extends Controller
             'name' => 'required',
             'phone' => 'required',
             'email' => 'required|email',
-            'message' => 'required'
+            'message' => 'nullable'
            ]); 
         $message=Message::find($id);
 
@@ -90,16 +79,13 @@ class MessageController extends Controller
             ]);
         }
 
-      
-           
-        $message->name=$request->name;
-        $message->phone=$request->phone;
-        $message->email=$request->email;
-        $message->message=$request->message;
-
-       
-        $message->save();
-        return response()->json([
+      $message->update([
+        'name'=> $request->name,
+        'phone'=> $request->phone,
+        'email'=> $request->email,
+        'message'=> $request->message ?: null
+      ]);
+ return response()->json([
             'status'=>200,
             'message'=>'message updated successfully'
         ]);
