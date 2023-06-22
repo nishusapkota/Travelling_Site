@@ -15,7 +15,7 @@ class CoverphotoResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'title'=>$this->title,
+            'location'=>$this->location,
             'cover-image'=>$this->cover_image,
             'destination_id'=>$this->destination_id
         ];

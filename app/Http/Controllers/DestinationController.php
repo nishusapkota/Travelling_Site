@@ -30,7 +30,7 @@ class DestinationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Destination $destination,DestinationStoreRequest $req)
+    public function store(DestinationStoreRequest $request, Destination $destination)
 {
    // $req->validated();
     $image_name = time() . "." . $request->file('portrait_image')->getClientOriginalExtension();
