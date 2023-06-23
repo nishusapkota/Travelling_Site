@@ -13,15 +13,7 @@ class StoreTourEnquiryRequest extends FormRequest
      */
     public function authorize()
     {
-        return [
-        'name'=>'required',
-        'email'=>'required',
-        'mobile_no'=>'required|numeric|digits:10',
-        'num_of_person'=>'required',
-        'package_id'=>'required|exists:packages,id',
-        'tour_date'=>'required|date',
-        'enquiry'=>'required'
-        ];
+        return true;
     }
 
     /**
@@ -32,7 +24,13 @@ class StoreTourEnquiryRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+        'name'=>'required',
+        'email'=>'required',
+        'mobile_no'=>'required|numeric|digits:10',
+        'num_of_person'=>'required',
+        'package_id'=>'required|exists:packages,id',
+        'tour_date'=>'required|date',
+        'enquiry'=>'required'
         ];
     }
 }

@@ -13,18 +13,7 @@ class StoreTripEnquiryRequest extends FormRequest
      */
     public function authorize()
     {
-        return [
-        'name'=>'required',
-        'email'=>'required|email',
-        'mobile_num'=>'required|numeric|digits:10',
-        'group_size'=>'required',
-        'travel_dates'=>'required|date',
-        'destination_id'=>'nullable|exists:destinations,id',
-        'estimate_budget'=>'required',
-        'budget_flexible'=>'required|boolean',
-        'primary_age'=>'required',
-        'experience'=>'nullable'
-        ];
+     return true;  
     }
 
     /**
@@ -35,7 +24,16 @@ class StoreTripEnquiryRequest extends FormRequest
     public function rules()
     {
         return [
-            //
-        ];
+            'name'=>'required',
+            'email'=>'required|email',
+            'mobile_num'=>'required|numeric|digits:10',
+            'group_size'=>'required',
+            'travel_dates'=>'required|date',
+            'destination_id'=>'nullable|exists:destinations,id',
+            'estimate_budget'=>'required',
+            'budget_flexible'=>'boolean',
+            'primary_age'=>'required',
+            'experience'=>'nullable'
+            ];
     }
 }

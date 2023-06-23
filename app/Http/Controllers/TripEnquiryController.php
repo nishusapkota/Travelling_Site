@@ -27,6 +27,7 @@ class TripEnquiryController extends Controller
      */
     public function store(StoreTripEnquiryRequest $request)
     {
+       // dd($request->all());
         TripEnquiry::create([
             'name'=>$request->name,
             'email'=>$request->email,
@@ -35,7 +36,7 @@ class TripEnquiryController extends Controller
             'travel_dates'=>$request->travel_dates,
             'destination_id'=>$request->destination_id ?: null,
             'estimate_budget'=>$request->estimate_budget,
-            'budget_flexible'=>$request->budget_flexible == 'yes' ? 1 : 0 ,
+            'budget_flexible' => $request->budget_flexible,
             'primary_age'=>$request->primary_age,
             'experience'=>$request->experience ?: null
         ]);
@@ -81,12 +82,12 @@ class TripEnquiryController extends Controller
             'travel_dates'=>$request->travel_dates,
             'destination_id'=>$request->destination_id ?: null,
             'estimate_budget'=>$request->estimate_budget,
-            'budget_flexible'=>$request->budget_flexible == 'yes' ? 1 : 0 ,
+            'budget_flexible'=>$request->budget_flexible ,
             'primary_age'=>$request->primary_age,
             'experience'=>$request->experience ?: null
         ]);
         return response()->json([
-            'message'=> 'Tour enquiry updated successfully',
+            'message'=> 'Trip enquiry updated successfully',
             'status'=> 201
         ]);
     
