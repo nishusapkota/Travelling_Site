@@ -34,4 +34,7 @@ class Package extends Model
     function packageInDemand(){
         return $this->belongsTo('\App\Models\PackagesInDemand');
     }
+    function reviews() {
+        return $this->hasMany('\App\Models\Review');
+    }
 }

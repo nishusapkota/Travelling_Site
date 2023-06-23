@@ -19,7 +19,7 @@ class TripEnquiryResource extends JsonResource
             'email'=>$this->email,
             'mobile_num'=>$this->mobile_num,
             'group_size'=>$this->group_size,
-            'travel_dates'=>$this->travel_dates,
+            'travel_dates'=>json_decode($this->travel_dates),
             'destination_id'=>$this->destination->destination ?: null,
             'estimate_budget'=>$this->estimate_budget,
             'budget_flexible'=>$this->budget_flexible,

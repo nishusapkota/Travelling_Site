@@ -28,7 +28,7 @@ class StoreTripEnquiryRequest extends FormRequest
             'email'=>'required|email',
             'mobile_num'=>'required|numeric|digits:10',
             'group_size'=>'required',
-            'travel_dates'=>'required|date',
+            'travel_dates.*'=>'required',
             'destination_id'=>'nullable|exists:destinations,id',
             'estimate_budget'=>'required',
             'budget_flexible'=>'boolean',

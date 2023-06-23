@@ -46,4 +46,7 @@ class Destination extends Model
     function tripEnquiries(){
         return $this->hasMany('TripEnquiry::class');
     }
+    function reviews() {
+        return $this->hasMany('\App\Models\Review');
+    }
 }

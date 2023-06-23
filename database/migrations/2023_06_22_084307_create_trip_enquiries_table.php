@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('mobile_num');
             $table->string('group_size');
-            $table->datetime('travel_dates');
+            $table->json('travel_dates');
             $table->unsignedBigInteger('destination_id');
             $table->foreign('destination_id')->references('id')->on('destinations')->onDelete('cascade');
             $table->string('estimate_budget');

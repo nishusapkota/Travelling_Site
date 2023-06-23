@@ -5,11 +5,13 @@ use App\Models\TopAttraction;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\CoverPhotoController;
 use App\Http\Controllers\DestinationController;
+use App\Http\Controllers\EnquiryController;
 use App\Http\Controllers\PortraitImgController;
 use App\Http\Controllers\SocialMediaController;
 use App\Http\Controllers\TourEnquiryController;
@@ -35,7 +37,6 @@ Route::apiResource('faq', FaqController::class);
 Route::apiResource('top-attraction', TopAttractionController::class);
 
 
-Route::apiResource('messages', '\App\Http\Controllers\MessageController');
 
 Route::post('blog',[BlogController::class,'store']);
 Route::patch('blog/{id}',[BlogController::class,'update']);
@@ -51,7 +52,22 @@ Route::apiResource('package-included', '\App\Http\Controllers\PackageIncludedCon
 Route::apiResource('itinerary', '\App\Http\Controllers\ItineraryController');
 Route::apiResource('testimonial', '\App\Http\Controllers\TestimonialController');
 
-
+//Review Enquiry
+Route::get('review',[EnquiryController::class,'indexReview']);
+Route::post('review',[EnquiryController::class,'storeReview']);
+Route::delete('review/{id}',[EnquiryController::class,'destroyReview']);
+//Trip Enquiry
+Route::get('trip-enquiry',[EnquiryController::class,'indexTrip']);
+Route::post('trip-enquiry',[EnquiryController::class,'storeTrip']);
+Route::delete('trip-enquiry/{id}',[EnquiryController::class,'destroyTrip']);
+//Tour Enquiry
+Route::get('tour-enquiry',[EnquiryController::class,'indexTour']);
+Route::post('tour-enquiry',[EnquiryController::class,'storeTour']);
+Route::delete('tour-enquiry/{id}',[EnquiryController::class,'destroyTour']);
+//Normal Enquiry
+Route::get('messages',[EnquiryController::class,'indexMessage']);
+Route::post('messages',[EnquiryController::class,'storeMessage']);
+Route::delete('messages/{id}',[EnquiryController::class,'destroyMessage']);
 
 Route::get('destination-list', [\App\Http\Controllers\FrontendController::class, 'destination_list']);
 Route::get('things-to-do-list', [\App\Http\Controllers\FrontendController::class, 'package_category_list']);
@@ -66,8 +82,8 @@ Route::get('destination-by-things-to-do/{id}', [
 Route::patch('cover-photo/{id}',[CoverPhotoController::class,'update']);
 Route::delete('cover-photo/{id}',[CoverPhotoController::class,'destroy']);
 
-//portrait images
-Route::apiResource('portrait-image', '\App\Http\Controllers\PortraitImgController');
+
+
 //packages in demand
 Route::post('package-in-demand', [\App\Http\Controllers\FrontendController::class, 'createPackageInDemand']);
 Route::patch('package-in-demand/{id}', [\App\Http\Controllers\FrontendController::class, 'updatePackageInDemand']);
@@ -76,10 +92,8 @@ Route::delete('package-in-demand/{id}', [\App\Http\Controllers\FrontendControlle
 Route::post('top-destination', [\App\Http\Controllers\FrontendController::class, 'createTopDestination']);
 Route::patch('top-destination/{id}', [\App\Http\Controllers\FrontendController::class, 'updateTopDestination']);
 Route::delete('top-destination/{id}', [\App\Http\Controllers\FrontendController::class, 'deleteTopDestination']);
-//tour-enquiries
-Route::apiResource('tour-enquiry', '\App\Http\Controllers\TourEnquiryController');
-//trip-enquiries
-Route::apiResource('trip-enquiry', '\App\Http\Controllers\TripEnquiryController');
+
+
 
 
 //FRONTEND no auth
