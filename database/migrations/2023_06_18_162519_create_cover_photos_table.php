@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('location');
             $table->string('cover_image');
             $table->unsignedBigInteger('destination_id');
-            $table->foreign('destination_id')->references('id')->on('destinations');
+            $table->foreign('destination_id')->references('id')->on('destinations')->onDelete('cascade');
             $table->timestamps();
         });
     }

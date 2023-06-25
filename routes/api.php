@@ -79,8 +79,8 @@ Route::get('destination-by-things-to-do/{id}', [
 
 
 //cover images
+Route::get('cover-photo/{destination_id}',[CoverPhotoController::class,'index']);
 Route::patch('cover-photo/{id}',[CoverPhotoController::class,'update']);
-Route::delete('cover-photo/{id}',[CoverPhotoController::class,'destroy']);
 
 
 

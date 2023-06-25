@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\CoverphotoResource;
 use App\Models\CoverPhoto;
+use App\Models\Destination;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\CoverphotoResource;
 
 
 class CoverPhotoController extends Controller
@@ -17,7 +19,14 @@ class CoverPhotoController extends Controller
      */
     public function index($id)
     {
-        return CoverphotoResource::collection(CoverPhoto::all());
+       // dd($id);
+       $coverPhotos = DB::table('cover_photos')
+        ->where('destination_id', $id)
+        ->get();
+
+    return CoverphotoResource::collection($coverPhotos);
+       // CoverPhoto::where('destination_id',$id)->get();
+     
     }
 
     /**
@@ -50,7 +59,7 @@ class CoverPhotoController extends Controller
     public function update(Request $request, $id)
 {
     $validator = Validator::make($request->all(), [
-        'title' => 'required',
+        'location' => 'required',
         'cover_image' => 'required|image',
         'destination_id' => 'required|exists:destinations,id',
     ]);
@@ -69,31 +78,11 @@ class CoverPhotoController extends Controller
             $coverImage->move(public_path('cover_image'),$coverImageName);
            
 $coverPhoto->update([
-    $coverPhoto->title => $request->input('title'),
-    $coverPhoto->cover_image = $coverImageName,
-    $coverPhoto->destination_id= $request->input('destination_id')
+    'location' => $request->input('location'),
+    'cover_image' => 'cover_image/'.$coverImageName,
+    'destination_id' => $request->input('destination_id')
 ]);
 return response()->json(['message' => 'Cover photo updated successfully'], 200);
 }
-
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-{
-    $coverPhoto = CoverPhoto::find($id);
-
-    if (!$coverPhoto) {
-        return response()->json(['error' => 'Cover photo not found'], 404);
-    }
-
-    $coverPhoto->delete();
-
-    return response()->json(['message' => 'Cover photo deleted successfully'], 200);
-}
-
+   
 }
