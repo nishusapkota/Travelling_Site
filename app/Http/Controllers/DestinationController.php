@@ -138,10 +138,15 @@ class DestinationController extends Controller
     if (!$coverPhoto) {
         return response()->json(['error' => 'Cover photo not found'], 404);
     }
-    $coverImage = $request->file('cover_image');
-            $coverImageName = time() . '_' . $coverImage->getClientOriginalName();
-            $coverImage->move(public_path('cover_image'),$coverImageName);
-           
+    if ($request->hasFile('cover_image')) {
+        $imagePath = public_path($coverPhoto->cover_image);
+        if (file_exists($imagePath)) {
+            unlink($imagePath);
+        }
+        $coverImage = $request->file('cover_image');
+        $coverImageName = time() . '_' . $coverImage->getClientOriginalName();
+        $coverImage->move(public_path('cover_image'),$coverImageName);
+    }                     
 $coverPhoto->update([
     'location' => $request->input('location'),
     'cover_image' => 'cover_image/'.$coverImageName,
