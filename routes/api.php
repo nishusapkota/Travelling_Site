@@ -81,6 +81,7 @@ Route::get('destination-by-things-to-do/{id}', [
 
 //cover images
 Route::patch('cover-photo/{id}',[DestinationController::class,'updateCover']);
+Route::delete('cover-photo/{id}',[DestinationController::class,'deleteCover']);
 
 
 
@@ -101,6 +102,7 @@ Route::group(['prefix' => 'frontend'], function () {
     Route::get('packages/{id}', [FrontendController::class,'packageByCatagory']);
     Route::get('package-in-demand', [FrontendController::class,'readPackageInDemand']);
     Route::get('cover-photo/{destination_id}',[DestinationController::class,'indexCover']);
+   
     Route::get('top-destination', [FrontendController::class,'readTopDestination']);
     Route::get('things-to-do-by-destination/{destination_id}', [FrontendController::class,'package_category']);
     Route::get('blog',[BlogController::class,'index']);

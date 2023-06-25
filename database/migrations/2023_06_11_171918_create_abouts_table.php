@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('image');
             $table->string('img_title');
             $table->longText('img_body');
-            $table->string('icon');
             $table->string('client_count');
             $table->string('client_desc');
             $table->timestamps();

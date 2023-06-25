@@ -117,6 +117,19 @@ class DestinationController extends Controller
 
     }
 
+    function deleteCover($id) {
+        $coverPhoto = CoverPhoto::where('id',$id)->first();
+        //dd($coverPhoto);
+        $ImagePath = public_path($coverPhoto ->cover_image);
+        if(file_exists($ImagePath)){
+            unlink($ImagePath);
+        }
+       $coverPhoto->delete();
+       return response()->json([
+        'status'=>200,
+        'message'=>'successfully deleted'
+       ]);
+    }
     // public function updateCover(Request $request)
     // {
     //     $validator = Validator::make($request->all(), [
