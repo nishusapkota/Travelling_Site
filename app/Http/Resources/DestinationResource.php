@@ -18,7 +18,6 @@ class DestinationResource extends JsonResource
             'id'=>$this->id,
             'destination'=>$this->destination,
             'portrait_image'=>!is_null($this->portrait_image) ? asset($this->portrait_image) :null,
-            'short_description'=>$this->short_description,
             'description'=>$this->description
         ];
     }

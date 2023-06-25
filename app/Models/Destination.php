@@ -16,7 +16,6 @@ class Destination extends Model
         'destination',
         'portrait_image',
         'description',
-        'short_description',
         'package_category'
     ];
 

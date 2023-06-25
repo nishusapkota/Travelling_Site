@@ -15,11 +15,12 @@ return new class extends Migration
     {
         Schema::create('packages', function (Blueprint $table) {
             $table->id();
-            $table->string('location');
-            $table->string('image');
+            $table->string('title');
+            $table->json('image');
             $table->string('price');
             $table->longText('overview');
             $table->string('duration');
+            $table->longText('whats_included');
             $table->unsignedBiginteger('destinations_id')->unsigned();
             $table->foreign('destinations_id')->references('id')->on('destinations')->onDelete('cascade');
             $table->timestamps();

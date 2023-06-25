@@ -35,7 +35,6 @@ class DestinationController extends Controller
         $result = $destination->create([
             'destination' => $request->destination,
             'portrait_image' => 'portrait_image/' . $image_name,
-            'short_description' => $request->short_description ?: null,
             'description' => $request->description
         ]);
         $result->packageCategories()->attach($request->package_categories_id);
@@ -81,7 +80,6 @@ class DestinationController extends Controller
         }
         $destination->update([
             'destination' => $request->destination,
-            'short_description' => $request->short_description ?: null,
             'description' => $request->description,
             'portrait_image' => 'portrait_image/' . $image_name,
         ]);
@@ -111,47 +109,58 @@ class DestinationController extends Controller
 
     public function indexCover($id)
     {
-       // dd($id);
-       $coverPhotos = DB::table('cover_photos')
-        ->where('destination_id', $id)
-        ->get();
+        // dd($id);
+        $coverPhotos = DB::table('cover_photos')
+            ->where('destination_id', $id)
+            ->get();
 
-    return CoverphotoResource::collection($coverPhotos);
-       // CoverPhoto::where('destination_id',$id)->get();
-     
+        return CoverphotoResource::collection($coverPhotos);
+        // CoverPhoto::where('destination_id',$id)->get();
+
     }
 
-    public function updateCover(Request $request, $id)
-{
-    $validator = Validator::make($request->all(), [
-        'location' => 'required',
-        'cover_image' => 'required|image',
-        'destination_id' => 'required|exists:destinations,id',
-    ]);
+    // public function updateCover(Request $request)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'location' => 'required|array',
+    //         'location.*' => 'required',
+    //         'cover_id' => 'required|array',
+    //         'cover_id.*' => 'required',
+    //         'new_cover' => 'required|array',
+    //         'new_cover.*' => 'nullable|image',
+    //     ]);
 
-    if ($validator->fails()) {
-        return response()->json(['errors' => $validator->errors()], 400);
-    }
+    //     if ($validator->fails()) {
+    //         return response()->json(['errors' => $validator->errors()], 400);
+    //     }
+    //     foreach ($request->location as $key => $location) {
+    //         $coverPhoto = CoverPhoto::find($request->id);
+    //         if ($coverPhoto) {
+    //             if ($request->hasFile('new_cover')) {
+    //                 $imagePath = public_path($coverPhoto->cover_image);
+    //                 if (file_exists($imagePath)) {
+    //                     unlink($imagePath);
+    //                 }
+    //                 $coverImage = $request->file('cover_image');
+    //                 $coverImageName = time() . '_' . $coverImage->getClientOriginalName();
+    //                 $coverImage->move(public_path('cover_image'), $coverImageName);
+    //             }
+    //             $data
+    //         }else {
+    //             $data=[
+    //                 'location' => $request->input('location'),
+    //             ];
+    //         }
+    //         $coverPhoto->updateOrCreate(
+    //             [
+    //                 'id'=>$request->id,
+    //             ],
+    //             [
+    //             'cover_image' => 'cover_image/' . $coverImageName,
+    //             'destination_id' => $request->input('destination_id')
+    //         ]);
+    //     }
 
-    $coverPhoto = CoverPhoto::find($id);
-
-    if (!$coverPhoto) {
-        return response()->json(['error' => 'Cover photo not found'], 404);
-    }
-    if ($request->hasFile('cover_image')) {
-        $imagePath = public_path($coverPhoto->cover_image);
-        if (file_exists($imagePath)) {
-            unlink($imagePath);
-        }
-        $coverImage = $request->file('cover_image');
-        $coverImageName = time() . '_' . $coverImage->getClientOriginalName();
-        $coverImage->move(public_path('cover_image'),$coverImageName);
-    }                     
-$coverPhoto->update([
-    'location' => $request->input('location'),
-    'cover_image' => 'cover_image/'.$coverImageName,
-    'destination_id' => $request->input('destination_id')
-]);
-return response()->json(['message' => 'Cover photo updated successfully'], 200);
-}
+    //     return response()->json(['message' => 'Cover photo updated successfully'], 200);
+    // }
 }

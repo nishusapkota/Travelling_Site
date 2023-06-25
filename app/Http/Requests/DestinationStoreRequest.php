@@ -28,7 +28,6 @@ class DestinationStoreRequest extends FormRequest
                 'portrait_image'=>'required|image|mimes:png,jpg,jpeg',
                 'location'=>'required',
                 'cover_image'=>'required',
-                'short_description'=>'nullable',
                 'description'=>'required',
                 'package_categories_id'=>'nullable|array',      
                 'package_categories_id.*'=>'nullable|exists:package_categories,id',

@@ -9,10 +9,10 @@ class Itinerary extends Model
 {
     use HasFactory;
     protected $fillable=[
-        'title',
-        'description',
+        'day',
+        'short_description',
         'package_id',
-        'body'
+        'description'
     ];
     function package(){
         return $this->belongsTo('\App\Models\Package');
