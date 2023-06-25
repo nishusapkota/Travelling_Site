@@ -12,7 +12,6 @@ class Package extends Model
     use HasFactory;
     protected $fillable=[
         'title',
-        'image',
         'package_category_id',
         'price',
         'overview',
@@ -38,5 +37,8 @@ class Package extends Model
     }
     function reviews() {
         return $this->hasMany('\App\Models\Review');
+    }
+    function packageImages() {
+        return $this->hasMany('\App\Models\PackageImage');
     }
 }

@@ -48,14 +48,12 @@ class DestinationController extends Controller
                 'destination_id' => $result->id
             ]);
         }
-
         if ($result) {
             return response()->json([
                 'status' => 200,
                 'message' => 'Destination created successfully.'
             ]);
         }
-
         return response()->json([
             'status' => 201,
             'message' => 'Failed to create destination.'

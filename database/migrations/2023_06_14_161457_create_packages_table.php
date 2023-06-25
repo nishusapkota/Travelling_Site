@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('packages', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->json('image');
             $table->string('price');
             $table->longText('overview');
             $table->string('duration');

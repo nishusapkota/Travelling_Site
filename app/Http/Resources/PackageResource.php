@@ -15,13 +15,12 @@ class PackageResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'location'=>$this->location,
-            'image'=>asset($this->image),
+            'title'=>$this->title,
             'price'=>$this->price,
             'overview'=>$this->overview,
             'duration'=>$this->duration,
             'destination_id'=>$this->destinations_id,
-            'destination_name'=>$this->destination->title
+            'destination_name'=>$this->destination->destination
         ];
     }
 }
