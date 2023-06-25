@@ -14,8 +14,9 @@ use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\EnquiryController;
 use App\Http\Controllers\PortraitImgController;
 use App\Http\Controllers\SocialMediaController;
-use App\Http\Controllers\TourEnquiryController;
+
 use App\Http\Controllers\TopAttractionController;
+use App\Models\Destination;
 
 /*
 |--------------------------------------------------------------------------
@@ -79,8 +80,7 @@ Route::get('destination-by-things-to-do/{id}', [
 
 
 //cover images
-Route::get('cover-photo/{destination_id}',[CoverPhotoController::class,'index']);
-Route::patch('cover-photo/{id}',[CoverPhotoController::class,'update']);
+Route::patch('cover-photo/{id}',[DestinationController::class,'updateCover']);
 
 
 
@@ -100,7 +100,7 @@ Route::delete('top-destination/{id}', [\App\Http\Controllers\FrontendController:
 Route::group(['prefix' => 'frontend'], function () {
     Route::get('packages/{id}', [FrontendController::class,'packageByCatagory']);
     Route::get('package-in-demand', [FrontendController::class,'readPackageInDemand']);
-    Route::get('cover-photo', [CoverPhotoController::class,'index']);
+    Route::get('cover-photo/{destination_id}',[DestinationController::class,'indexCover']);
     Route::get('top-destination', [FrontendController::class,'readTopDestination']);
     Route::get('things-to-do-by-destination/{destination_id}', [FrontendController::class,'package_category']);
     Route::get('blog',[BlogController::class,'index']);

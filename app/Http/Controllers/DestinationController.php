@@ -6,6 +6,9 @@ use App\Models\CoverPhoto;
 use App\Models\Destination;
 use Illuminate\Http\Request;
 use App\Models\PackageCategory;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\CoverphotoResource;
 use App\Http\Resources\DestinationResource;
 use App\Http\Requests\DestinationStoreRequest;
 use App\Http\Requests\DestinationUpdateRequest;
@@ -105,4 +108,45 @@ class DestinationController extends Controller
             ]);
         }
     }
+
+    public function indexCover($id)
+    {
+       // dd($id);
+       $coverPhotos = DB::table('cover_photos')
+        ->where('destination_id', $id)
+        ->get();
+
+    return CoverphotoResource::collection($coverPhotos);
+       // CoverPhoto::where('destination_id',$id)->get();
+     
+    }
+
+    public function updateCover(Request $request, $id)
+{
+    $validator = Validator::make($request->all(), [
+        'location' => 'required',
+        'cover_image' => 'required|image',
+        'destination_id' => 'required|exists:destinations,id',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 400);
+    }
+
+    $coverPhoto = CoverPhoto::find($id);
+
+    if (!$coverPhoto) {
+        return response()->json(['error' => 'Cover photo not found'], 404);
+    }
+    $coverImage = $request->file('cover_image');
+            $coverImageName = time() . '_' . $coverImage->getClientOriginalName();
+            $coverImage->move(public_path('cover_image'),$coverImageName);
+           
+$coverPhoto->update([
+    'location' => $request->input('location'),
+    'cover_image' => 'cover_image/'.$coverImageName,
+    'destination_id' => $request->input('destination_id')
+]);
+return response()->json(['message' => 'Cover photo updated successfully'], 200);
+}
 }
