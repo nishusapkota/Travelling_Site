@@ -86,4 +86,49 @@ class PackageController extends Controller
             'message' => 'Record not available'
         ]);
     }
+
+    function update(StorePackageRequest $request,$id){
+        $package=Package::where('id',$id)->first();
+        $package->update([
+            'title' => $request->title,
+            'price' => $request->price,
+            'overview' => $request->overview,
+            'duration' => $request->duration,
+            'whats_included' => $request->whats_included,
+            'destinations_id' => $request->destinations_id
+        ]);
+        if ($request->hasFile('image')) {
+           $package_images=PackageImage::where('package_id',$package->id)->get();
+           foreach($package_images as $packageImage){
+            $imagePath=public_path($packageImage->image);
+            unlink($imagePath);
+           }
+            foreach ($request->file('image') as $image) {
+                $image_name = time() . "_" . $image->getClientOriginalName();
+                $image->move(public_path('package_image'), $image_name);
+                PackageImage::create([
+                    'image' => 'package_image/' . $image_name,
+                    'package_id' => $package->id
+                ]);
+            }
+        }
+
+        $itineraries=Itinerary::where('package_id',$package->id)->get();
+        foreach($itineraries as $itinerary){
+            $itinerary->delete();
+        }
+        foreach ($request->day as $key => $day) {
+            Itinerary::create([
+                'day' => $day,
+                'short_description' => $request->short_description[$key],
+                'description' => $request->description[$key],
+                'package_id' => $package->id
+            ]);
+        }
+        $package->packageCategories()->attach($request->package_categories_id);
+        return response()->json([
+            'status' => 200,
+            'message' => 'Package updated successfully.'
+        ]);
+    }
 }
