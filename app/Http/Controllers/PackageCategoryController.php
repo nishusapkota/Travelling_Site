@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\PackageCategoryResource;
-use App\Models\Destination;
 use App\Models\Package;
+use App\Models\Destination;
+use Illuminate\Http\Request;
 use App\Models\PackageCategory;
+use Illuminate\Support\Facades\DB;
 use App\Models\DestinationPackageCategory;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Http\Requests\StorePackageCategory;
+use App\Http\Resources\PackageCategoryResource;
+use App\Http\Requests\StorePackageCategoryRequest;
+use App\Http\Requests\StorePackageRequest;
 
 class PackageCategoryController extends Controller
 {
@@ -20,10 +23,10 @@ class PackageCategoryController extends Controller
      */
     public function index()
     {
-        $packageCategory=PackageCategory::with('destinations')->get();
+        $packageCategory = PackageCategory::with('destinations')->get();
         return response()->json([
-            'status'=>200,
-            'data'=>PackageCategoryResource::collection($packageCategory)
+            'status' => 200,
+            'data' => PackageCategoryResource::collection($packageCategory)
         ]);
     }
 
@@ -33,45 +36,27 @@ class PackageCategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request ,PackageCategory $packageCategory )
+    public function store(StorePackageCategoryRequest $request)
     {
-        $request->validate([
-            'title'=>'required',
-            'image'=>'required|image|mimes:png,jpg,jpeg',
-            'description'=>'required',
-            'short_description'=>'nullable',
-            'destinations_id'=>'required|array',      
-            'destinations_id.*'=>'required|exists:destinations,id',      
-            
-        ]);
         // dd($request->all());
         // DB::beginTransaction();
-        $image_name=time().".".$request->file('image')->getClientOriginalExtension();
-        $request->file('image')->move(public_path('category_image'),$image_name);
-        
-       $result= $packageCategory->create([
-        'title'=>$request->title,
-            'image'=>'category_image/'.$image_name,
-            'description'=>$request->description,
-            
-           'short_description'=>$request->has('short_description')?
-           $request->short_description : null
+        $image_name = time() . "." . $request->file('image')->getClientOriginalExtension();
+        $request->file('image')->move(public_path('category_image'), $image_name);
+
+        $result = PackageCategory::create([
+            'title' => $request->title,
+            'image' => 'category_image/' . $image_name,
+            'description' => $request->description,
+            'short_description' => $request->short_description ?: null
         ]);
         // dd($result);
         // $destinationid = collect(Destination::all())->pluck('id')->toArray();
         $result->destinations()->attach($request->destinations_id);
         // dd($result->destinations());
-        if($result){
-            return response()->json([
-                'status'=>200,
-                'message'=>'Category created successfully..'
-            ]);
-        }
         return response()->json([
-            'status'=>201,
-            'message'=>'Failed to create category..'
+            'status' => 200,
+            'message' => 'Category created successfully..'
         ]);
-
     }
 
     /**
@@ -80,25 +65,7 @@ class PackageCategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        $packageCategory=PackageCategory::with('destinations')->find($id);
-        
-        if($packageCategory){
-            return response()->json([
-                'status'=>200,
-                'data' => PackageCategoryResource::collection([$packageCategory])
-                ->map(function ($resource) {
-                    return $resource->toArray(request());
-                })
-                
-            ]);
-        }
-        return response()->json([
-            'status'=>201,
-            'message'=>'Result Not Found...'
-        ]);
-    }
+
 
     /**
      * Update the specified resource in storage.
@@ -107,47 +74,33 @@ class PackageCategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StorePackageCategoryRequest $request, $id)
     {
-        $request->validate([
-            'title'=>'required',
-            'image'=>'required|image|mimes:png,jpg,jpeg',
-            'description'=>'required',
-            'short_description'=>'nullable',
-            'destinations_id'=>'required|array',
-            'destinations_id.*'=>'required|exists:destinations,id',      
-
-        ]);
-        $packageCategory=PackageCategory::find($id);
-
-        if(!$packageCategory){
+        $packageCategory = PackageCategory::find($id);
+        if (!$packageCategory) {
             return response()->json([
-                'status'=>201,
-                'message'=>"Record not available.."
+                'status' => 201,
+                'message' => "Record not available.."
             ]);
         }
-        $image_name=time().".".$request->file('image')->getClientOriginalExtension();
-        $request->file('image')->move(public_path('category_image'),$image_name);
+        if ($request->hasFile('image')) {
+            $ImagePath = public_path($packageCategory->image);
+            unlink($ImagePath);
+            $image_name = time() . "." . $request->file('image')->getClientOriginalExtension();
+            $request->file('image')->move(public_path('category_image'), $image_name);
+        }
+
         $packageCategory->destinations()->sync($request->destinations_id);
-
-        $result=$packageCategory->update([
-            'title'=>$request->title,
-            'image'=>'category_image/'.$image_name,
-            'description'=>$request->description,
-            'short_description'=>$request->has('short_description')?
-           $request->short_description : null
+        $result = $packageCategory->update([
+            'title' => $request->title,
+            'image' => 'category_image/' . $image_name,
+            'description' => $request->description,
+            'short_description' => $request->short_description ?: null
         ]);
-        if($result){
-            return response()->json([
-                'status'=>200,
-                'message'=>'updated successfully....'
-            ]);
-        }
         return response()->json([
-            'status'=>201,
-            'message'=>'Fail to update ....'
+            'status' => 200,
+            'message' => 'updated successfully....'
         ]);
-
     }
 
     /**
@@ -158,19 +111,19 @@ class PackageCategoryController extends Controller
      */
     public function destroy($id)
     {
-        $record=PackageCategory::find($id);
-        $record->destinations()->detach();
-        $result=$record->delete();
-
-        if($result){
+        $record = PackageCategory::find($id);
+        if ($record) {
+            $record->destinations()->detach();
+            unlink(public_path($record->image));
+            $record->delete();
             return response()->json([
-                'status'=>200,
-                'message'=>'Deleted Successfully'
+                'status' => 200,
+                'message' => 'Deleted Successfully'
             ]);
-        return response()->json([
-            'status'=>201,
-            'message'=>'Failed to delete'
-        ]);
+            return response()->json([
+                'status' => 201,
+                'message' => 'Record not available....'
+            ]);
         }
     }
 }

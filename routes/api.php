@@ -49,7 +49,6 @@ Route::patch('socialmedia/{id}', [SocialMediaController::class, 'update']);
 Route::apiResource('contact', '\App\Http\Controllers\ContactController');
 Route::apiResource('things-to-do', '\App\Http\Controllers\PackageCategoryController');
 Route::apiResource('package', '\App\Http\Controllers\PackageController');
-Route::apiResource('itinerary', '\App\Http\Controllers\ItineraryController');
 Route::apiResource('testimonial', '\App\Http\Controllers\TestimonialController');
 
 //Review Enquiry
