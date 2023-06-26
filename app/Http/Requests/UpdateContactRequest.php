@@ -23,11 +23,12 @@ class UpdateContactRequest extends FormRequest
      */
     public function rules()
     {
+        $ContactId= $this->route('contact');
         return [
             'description'=>'required',
             'address'=>'required',
             'phone'=>'required|array',
-            'email'=>'required|email|unique:contacts,email,$id'
+            'email'=>'required|email|unique:contacts,email,'. $ContactId
         ];
     }
 }
