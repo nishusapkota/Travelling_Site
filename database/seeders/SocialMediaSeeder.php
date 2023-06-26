@@ -20,6 +20,14 @@ class SocialMediaSeeder extends Seeder
             'link'=>'https://www.facebook.com/'
         ]);
         SocialMedia::create([
+            'name'=>'youtube',
+            'link'=>'https://www.youtube.com/'
+        ]);
+        SocialMedia::create([
+            'name'=>'tiktok',
+            'link'=>'https://www.tiktok.com/'
+        ]);
+        SocialMedia::create([
             'name'=>'linkedin',
             'link'=>'https://www.linkedin.com/'
         ]);

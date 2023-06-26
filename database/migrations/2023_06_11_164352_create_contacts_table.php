@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('address');
             $table->json('phone');
             $table->string('email');
-           
             $table->timestamps();
         });
     }
