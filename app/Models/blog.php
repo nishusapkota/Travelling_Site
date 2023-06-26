@@ -12,7 +12,7 @@ class Blog extends Model implements HasMedia
     use HasFactory, InteractsWithMedia;
 
     protected $fillable=[
-        'description',
+       // 'description',
         'image',
         'title',
         'body'

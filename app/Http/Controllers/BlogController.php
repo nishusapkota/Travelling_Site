@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreBlogRequest;
 use App\Models\Blog;
 use Illuminate\Http\Request;
 
@@ -23,28 +24,18 @@ class BlogController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreBlogRequest $request)
     {
-        $this->validate($request,[
-            'description'=>'required',
-            'image'=>'required|image|mimes:jpeg,png,jpg,gif',
-            'title'=>'required',
-            'body'=>'required'
-        ]);
-
-        $blog= new Blog();
-        $blog->description=$request->description;
-
         $image_name= time().".".$request->file('image')->getClientOriginalExtension();
-       $path=$request->file('image')->move(public_path('blog_image'),$image_name);
-        $blog->image=$image_name;
-
-        $blog->title=$request->title;
-        $blog->body=$request->body;
-
-        $blog->save();
-
+       $request->file('image')->move(public_path('blog_image'),$image_name);
+       Blog::create([
+       // 'description' => $request->description,
+        'image' => 'blog_image/'.$image_name,
+        'title' => $request->title,
+        'body' => $request->body
+       ]);
         return response()->json([
+            'status'=>200,
             'message'=>'Blog created successfully..'
         ]);
     }
@@ -55,17 +46,7 @@ class BlogController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        $blog=Blog::find($id);
-        if($blog){
-            return $blog;
-        }
-        return response()->json([
-            'message'=>'record isnot available...'
-        ]);
-
-    }
+    
 
     /**
      * Update the specified resource in storage.
@@ -74,40 +55,34 @@ class BlogController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreBlogRequest $request, $id)
     {
-       $request->validate([
-            'description'=>'required',
-            'image'=>'required|image|mimes:jpeg,png,jpg,gif',
-            'title'=>'required',
-            'body'=>'required'
-        ]);
         $blog=Blog::find($id);
         if(!$blog){
             return response()->json([
+                'status'=>201,
                 'message'=>'Blog not available..'
             ]);
         }
-        $image_name= time().".".$request->file('image')->getClientOriginalExtension();
-        $request->file('image')->move(public_path('blog_image'),$image_name);
-
+        if($request->hasFile('image')){
+            $image_path=public_path($blog->image);
+            if(file_exists($image_path)){
+                unlink($image_path);
+            }
+            $image_name= time().".".$request->file('image')->getClientOriginalExtension();
+            $request->file('image')->move(public_path('blog_image'),$image_name);    
+        }
+        
         $result=$blog->update([
-            'description'=>$request->description,
+           // 'description'=>$request->description,
             'title'=>$request->title,
-            'image'=>$image_name,
+            'image'=>'blog_image/'.$image_name,
             'body'=>$request->body
         ]);
-        if($result){
-            return response()->json([
-                'message'=>'blog updated successfully....'
-            ]);
-        }
         return response()->json([
-            'message'=>'Fail to update blog....'
-        ]);
-
-
-        
+            'status'=>200,
+            'message'=>'blog updated successfully....'
+        ]);   
     }
 
     /**
@@ -118,14 +93,22 @@ class BlogController extends Controller
      */
     public function destroy($id)
     {
-      $result=Blog::destroy($id);
-      if($result){
+      $blog=Blog::find($id);
+      if(!$blog){
         return response()->json([
-            'message'=>'Blog Deleted Successfully'
+            'status'=> 201,
+            'message'=>"record not found.."
         ]);
-    return response()->json([
-        'message'=>'Failed to delete blog'
-    ]);
-    }
+      }
+      $image_path=public_path($blog->image);
+      if(file_exists($image_path)){
+        unlink($image_path);
+      }
+      $blog->delete();
+      return response()->json([
+        'status' => 200,
+        'message' => 'Blog deleted successfully...'
+      ]);
+      
     }
 }
