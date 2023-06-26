@@ -9,6 +9,7 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\EnquiryController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\CoverPhotoController;
@@ -82,6 +83,12 @@ Route::get('destination-by-things-to-do/{id}', [
 Route::post('association',[AssociationController::class,'store']);
 Route::patch('association/{id}',[AssociationController::class,'update']);
 Route::delete('association/{id}',[AssociationController::class,'destroy']);
+
+//General Setting
+Route::get('setting',[SettingController::class,'index']);
+Route::post('setting',[SettingController::class,'store']);
+Route::patch('setting/{id}',[SettingController::class,'update']);
+Route::delete('setting/{id}',[SettingController::class,'destroy']);
 
 //cover images
 Route::patch('cover-photo/{id}',[DestinationController::class,'updateCover']);
