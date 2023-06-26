@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreFaqRequest;
+use App\Http\Resources\FAQResource;
 use App\Models\FAQ;
 use Illuminate\Http\Request;
 
@@ -14,7 +16,7 @@ class FaqController extends Controller
      */
     public function index()
     {
-        return FAQ::all();
+        return FAQResource::collection(FAQ::all());
     }
 
     /**
@@ -23,20 +25,13 @@ class FaqController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreFaqRequest $request)
     {
-        $validatedData = $request->validate([
-            'destination_id' => 'required|exists:destinations,id',
-            'question' => 'required',
-            'answer' => 'required'
-        ]);
-
-        $faq = FAQ::create($validatedData);
-
+        $faq = FAQ::create($request->all());
         return response()->json([
             'message' => 'FAQ created successfully',
             'faq' => $faq
-        ], 201);
+        ], 200);
     }
 
 
@@ -46,10 +41,7 @@ class FaqController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
-    }
+    
 
     /**
      * Update the specified resource in storage.
@@ -58,26 +50,21 @@ class FaqController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreFaqRequest $request, $id)
     {
-        $validatedData = $request->validate([
-            'destination_id' => 'exists:destinations,id',
-            'question' => 'required',
-            'answer' => 'required'
-        ]);
-
-        $faq = FAQ::findOrFail($id);
+        $faq = FAQ::find($id);
         if ($faq) {
-            $faq->update($validatedData);
-
+            $faq->update($request->all());
             return response()->json([
+                'status'=>200,
                 'message' => 'FAQ updated successfully',
                 'faq' => $faq
-            ], 200);
+            ]);
         }
         return response()->json([
-            'message' => 'failed to update record.. ',
-        ], 202);
+            'status'=>201,
+            'message' => 'Record not available.. ',
+        ]);
     }
 
 
@@ -89,15 +76,17 @@ class FaqController extends Controller
      */
     public function destroy($id)
     {
-        $faq = FAQ::findOrFail($id);
+        $faq = FAQ::find($id);
         if (!$faq) {
             return response()->json([
+                'status'=>201,
                 'message' => 'No records found..'
-            ], 202);
+            ]);
         }
         $faq->delete();
         return response()->json([
+            'status'=>200,
             'message' => 'FAQ deleted successfully'
-        ], 200);
+        ]);
     }
 }
