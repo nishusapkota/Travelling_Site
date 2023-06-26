@@ -15,7 +15,10 @@ class TopDestinationResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'destination_id'=>$this->destination_id
+            'destination_id'=>$this->destination_id,
+            'destination' => $this->destination->destination,
+            'description' => $this->destination->description,
+            'portrait_image' => asset($this->destination->portrait_image)
         ];
     }
 }

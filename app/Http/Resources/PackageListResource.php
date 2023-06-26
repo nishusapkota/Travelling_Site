@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Package;
+use App\Models\PackageImage;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PackageListResource extends JsonResource
@@ -14,11 +16,12 @@ class PackageListResource extends JsonResource
      */
     public function toArray($request)
     {
+        $result=PackageImage::where('package_id',$this->id)->first();
         return 
         [
             'id'=>$this->id,
-            'location'=>$this->location,
-            'image'=>asset($this->image),
+            'title'=>$this->title,
+            'image'=>asset($result->image),
             'price'=>$this->price,
             'review'=>$this->review,
             'rating'=>$this->rating,

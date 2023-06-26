@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TestimonialResource extends JsonResource
+class BlogResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,11 +14,10 @@ class TestimonialResource extends JsonResource
      */
     public function toArray($request)
     {
-        return[
-            'name'=>$this->name,
-            'description'=>$this->description,
-            'rating'=>$this->rating,
-            'position'=>$this->position ?? null
+        return [
+            'image'=> asset($this->image),
+            'title'=> $this->title,
+            'body'=> $this->body
         ];
     }
 }

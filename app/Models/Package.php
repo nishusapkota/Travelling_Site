@@ -20,8 +20,8 @@ class Package extends Model
         'destinations_id'
     ];
     function packageCategories(){
-        return $this->belongsToMany('\App\Models\PackageCategory','package_package_categories','packages_id',
-        'package_categories_id');
+        return $this->belongsToMany('\App\Models\PackageCategory','package_package_categories',
+        'packages_id','package_categories_id');
     }
     function itineraries(){
         return $this->hasMany('Itinerary::class');

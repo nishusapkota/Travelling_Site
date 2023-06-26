@@ -15,7 +15,10 @@ class PackageInDemandResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'package_id'=>$this->package_id
+            'package_id'=>$this->package_id,
+            'title'=>$this->package->title,
+            'price'=>$this->package->price
+        
         ];
     }
 }

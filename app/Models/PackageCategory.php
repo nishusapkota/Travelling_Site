@@ -24,8 +24,7 @@ class PackageCategory extends Model
     }
 
     function packages(){
-        return $this->belongsToMany('\App\Models\Package','package_package_categories','packages_id'
-        ,'package_categories_id');
+        return $this->belongsToMany('\App\Models\Package','package_package_categories','package_categories_id','packages_id');
     }
 }
 

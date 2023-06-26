@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreTestimonialRequest;
 use App\Http\Resources\TestimonialResource;
 use App\Models\Testimonial;
 use Illuminate\Http\Request;
@@ -28,17 +29,9 @@ class TestimonialController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreTestimonialRequest $request)
     {
-        $validatedData = $request->validate([
-            'name'=>'required',
-            'description' => 'required',
-            'rating' => 'required',
-            'position' => 'nullable',
-        ]);
-    
-        $testimonial = Testimonial::create($validatedData);
-    
+        $testimonial = Testimonial::create($request->all());
         return response()->json([
             'message' => 'Testimonial created successfully.'
         ], 201);
@@ -50,14 +43,7 @@ class TestimonialController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        $testimonial = Testimonial::findOrFail($id);
-
-    return response()->json([
-       'message'=>'testimonial created successfully..'
-    ], 200);
-    }
+   
 
     /**
      * Update the specified resource in storage.
@@ -66,22 +52,21 @@ class TestimonialController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreTestimonialRequest $request, $id)
     {
-        $validatedData = $request->validate([
-            'name'=>'required',
-            'description' => 'required',
-            'rating' => 'required',
-            'position' => 'nullable',
-        ]);
-    
-        $testimonial = Testimonial::findOrFail($id);
-        $testimonial->update($validatedData);
-    
+        $testimonial = Testimonial::find($id);
+        if($testimonial){
+            $testimonial->update($request->all());
+            return response()->json([
+                'message' => 'Testimonial updated successfully...',
+               'status'=>200
+            ]);
+        }
         return response()->json([
-            'message' => 'Testimonial updated successfully.'
-           
-        ], 200);
+            'message' => 'Record not available...',
+           'status'=>201
+        ]);
+       
     }
 
     /**
@@ -92,11 +77,18 @@ class TestimonialController extends Controller
      */
     public function destroy($id)
     {
-        $testimonial = Testimonial::findOrFail($id);
-    $testimonial->delete();
-
-    return response()->json([
-        'message' => 'Testimonial deleted successfully.',
-    ], 200);
+        $testimonial = Testimonial::find($id);
+        if($testimonial){
+            $testimonial->delete();
+            return response()->json([
+                'message' => 'Testimonial deleted successfully...',
+               'status'=>200
+            ]);
+        }
+        return response()->json([
+            'message' => 'Record not available...',
+           'status'=>201
+        ]);
+        
     }
 }

@@ -14,7 +14,7 @@ use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\EnquiryController;
 use App\Http\Controllers\PortraitImgController;
 use App\Http\Controllers\SocialMediaController;
-
+use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\TopAttractionController;
 use App\Models\Destination;
 
@@ -49,7 +49,9 @@ Route::patch('socialmedia/{id}', [SocialMediaController::class, 'update']);
 Route::apiResource('contact', '\App\Http\Controllers\ContactController');
 Route::apiResource('things-to-do', '\App\Http\Controllers\PackageCategoryController');
 Route::apiResource('package', '\App\Http\Controllers\PackageController');
-Route::apiResource('testimonial', '\App\Http\Controllers\TestimonialController');
+Route::post('/testimonial',[TestimonialController::class,'store']);
+Route::patch('/testimonial/{id}',[TestimonialController::class,'update']);
+Route::delete('/testimonial/{id}',[TestimonialController::class,'destroy']);
 
 //Review Enquiry
 Route::get('review',[EnquiryController::class,'indexReview']);
@@ -100,7 +102,7 @@ Route::group(['prefix' => 'frontend'], function () {
     Route::get('packages/{id}', [FrontendController::class,'packageByCatagory']);
     Route::get('package-in-demand', [FrontendController::class,'readPackageInDemand']);
     Route::get('cover-photo/{destination_id}',[DestinationController::class,'indexCover']);
-   
+    Route::get('/testimonial',[TestimonialController::class,'index']);
     Route::get('top-destination', [FrontendController::class,'readTopDestination']);
     Route::get('things-to-do-by-destination/{destination_id}', [FrontendController::class,'package_category']);
     Route::get('blog',[BlogController::class,'index']);

@@ -86,7 +86,7 @@ public function createPackageInDemand(Request $request)
             'message' => 'Package in demand created successfully']);
     }
     function readPackageInDemand() {
-        return PackageInDemandResource::collection(PackagesInDemand::paginate(2));
+        return PackageInDemandResource::collection(PackagesInDemand::all());
     }
     public function updatePackageInDemand(Request $request, $id)
     {
@@ -136,7 +136,7 @@ public function createPackageInDemand(Request $request)
             'message' => 'Top Destination created successfully']);
     }
     function readTopDestination() {
-        return TopDestinationResource::collection(TopDestination::paginate(2));
+        return TopDestinationResource::collection(TopDestination::all());
     }
     public function updateTopDestination(Request $request, $id)
     {
