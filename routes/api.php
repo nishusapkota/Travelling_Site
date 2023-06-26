@@ -1,22 +1,23 @@
 <?php
 
+use App\Models\Destination;
 use Illuminate\Http\Request;
 use App\Models\TopAttraction;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\EnquiryController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\CoverPhotoController;
+use App\Http\Controllers\AssociationController;
 use App\Http\Controllers\DestinationController;
-use App\Http\Controllers\EnquiryController;
 use App\Http\Controllers\PortraitImgController;
 use App\Http\Controllers\SocialMediaController;
 use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\TopAttractionController;
-use App\Models\Destination;
 
 /*
 |--------------------------------------------------------------------------
@@ -77,13 +78,14 @@ Route::get('destination-by-things-to-do/{id}', [
     \App\Http\Controllers\FrontendController::class,
     'destinationByCatagory'
 ]);
-
+//Association
+Route::post('association',[AssociationController::class,'store']);
+Route::patch('association/{id}',[AssociationController::class,'update']);
+Route::delete('association/{id}',[AssociationController::class,'destroy']);
 
 //cover images
 Route::patch('cover-photo/{id}',[DestinationController::class,'updateCover']);
 Route::delete('cover-photo/{id}',[DestinationController::class,'deleteCover']);
-
-
 
 //packages in demand
 Route::post('package-in-demand', [\App\Http\Controllers\FrontendController::class, 'createPackageInDemand']);
@@ -100,6 +102,7 @@ Route::delete('top-destination/{id}', [\App\Http\Controllers\FrontendController:
 //FRONTEND no auth
 Route::group(['prefix' => 'frontend'], function () {
     Route::get('packages/{id}', [FrontendController::class,'packageByCatagory']);
+    Route::get('association',[AssociationController::class,'index']);
     Route::get('package-in-demand', [FrontendController::class,'readPackageInDemand']);
     Route::get('cover-photo/{destination_id}',[DestinationController::class,'indexCover']);
     Route::get('/testimonial',[TestimonialController::class,'index']);
