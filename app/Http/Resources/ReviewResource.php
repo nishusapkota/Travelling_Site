@@ -17,7 +17,7 @@ class ReviewResource extends JsonResource
         return [
             'destination_id'=>$this->destination->destination,
             'package_id'=>$this->package->location,
-            'star'=>$this->star,
+            'rating'=>$this->rating,
             'review'=>$this->review ?: null,
             'photos'=>json_decode($this->photos) ?: null
         ];

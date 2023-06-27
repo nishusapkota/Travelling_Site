@@ -15,10 +15,12 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\CoverPhotoController;
 use App\Http\Controllers\AssociationController;
 use App\Http\Controllers\DestinationController;
+use App\Http\Controllers\PackageController;
 use App\Http\Controllers\PortraitImgController;
 use App\Http\Controllers\SocialMediaController;
 use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\TopAttractionController;
+use App\Models\Package;
 
 /*
 |--------------------------------------------------------------------------
@@ -102,9 +104,6 @@ Route::delete('package-in-demand/{id}', [\App\Http\Controllers\FrontendControlle
 Route::post('top-destination', [\App\Http\Controllers\FrontendController::class, 'createTopDestination']);
 Route::patch('top-destination/{id}', [\App\Http\Controllers\FrontendController::class, 'updateTopDestination']);
 Route::delete('top-destination/{id}', [\App\Http\Controllers\FrontendController::class, 'deleteTopDestination']);
-
-
-
 
 //FRONTEND no auth
 Route::group(['prefix' => 'frontend'], function () {

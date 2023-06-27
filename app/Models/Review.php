@@ -11,7 +11,7 @@ class Review extends Model
     protected $fillable=[
         'destination_id',
         'package_id',
-        'star',
+        'rating',
         'review',
         'photos'
     ];

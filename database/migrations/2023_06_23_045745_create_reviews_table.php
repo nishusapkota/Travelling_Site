@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign('destination_id')->references('id')->on('destinations')->onDelete('cascade');
             $table->unsignedBigInteger('package_id');
             $table->foreign('package_id')->references('id')->on('packages')->onDelete('cascade');
-            $table->string('star');
+            $table->unsignedInteger('rating')->default(0);
             $table->text('review')->nullable();
             $table->json('photos')->nullable();
             $table->timestamps();

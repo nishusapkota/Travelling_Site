@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Rating;
+use App\Models\Review;
 use App\Models\Package;
 use App\Models\Itinerary;
 use App\Models\PackageImage;
+use Illuminate\Http\Request;
 use App\Http\Resources\PackageResource;
 use App\Http\Requests\StorePackageRequest;
 
@@ -13,10 +16,10 @@ class PackageController extends Controller
 {
     public function index()
     {
-        $package = Package::with('destination')->get();
+        $packages = Package::with('destination')->get();
         return response()->json([
             'status' => 200,
-            'data' => PackageResource::collection($package)
+            'data' => PackageResource::collection($packages)
         ]);
     }
     public function store(StorePackageRequest $request, Package $package)
@@ -87,8 +90,9 @@ class PackageController extends Controller
         ]);
     }
 
-    function update(StorePackageRequest $request,$id){
-        $package=Package::where('id',$id)->first();
+    function update(StorePackageRequest $request, $id)
+    {
+        $package = Package::where('id', $id)->first();
         $package->update([
             'title' => $request->title,
             'price' => $request->price,
@@ -98,11 +102,11 @@ class PackageController extends Controller
             'destinations_id' => $request->destinations_id
         ]);
         if ($request->hasFile('image')) {
-           $package_images=PackageImage::where('package_id',$package->id)->get();
-           foreach($package_images as $packageImage){
-            $imagePath=public_path($packageImage->image);
-            unlink($imagePath);
-           }
+            $package_images = PackageImage::where('package_id', $package->id)->get();
+            foreach ($package_images as $packageImage) {
+                $imagePath = public_path($packageImage->image);
+                unlink($imagePath);
+            }
             foreach ($request->file('image') as $image) {
                 $image_name = time() . "_" . $image->getClientOriginalName();
                 $image->move(public_path('package_image'), $image_name);
@@ -113,8 +117,8 @@ class PackageController extends Controller
             }
         }
 
-        $itineraries=Itinerary::where('package_id',$package->id)->get();
-        foreach($itineraries as $itinerary){
+        $itineraries = Itinerary::where('package_id', $package->id)->get();
+        foreach ($itineraries as $itinerary) {
             $itinerary->delete();
         }
         foreach ($request->day as $key => $day) {

@@ -26,7 +26,7 @@ class StoreReviewRequest extends FormRequest
         return [
             'destination_id' => 'nullable|exists:destinations,id',
             'package_id' => 'required|exists:packages,id',
-            'star' => 'required|string',
+            'rating' => 'required|integer|between:0,5',
             'review' => 'nullable',
             'photos.*' => 'nullable|image|mimes:jpeg,png,jpg',
         ];

@@ -71,7 +71,7 @@ class EnquiryController extends Controller
             Review::create([
                 'destination_id' => $request->destination_id,
                 'package_id' => $request->package_id,
-                'star' => $request->star,
+                'rating' => $request->rating,
                 'review' => $request->review ?: null,
                 'photos' => json_encode($photos)
             ]);
@@ -83,7 +83,7 @@ class EnquiryController extends Controller
         } catch (\Throwable $th) {
             DB::rollback();
             return response()->json([
-                'message' => 'Oops! Something went wrong. Please try again',
+                'message' => $th->getMessage(),
                 'status' => 400
             ]);
         }
